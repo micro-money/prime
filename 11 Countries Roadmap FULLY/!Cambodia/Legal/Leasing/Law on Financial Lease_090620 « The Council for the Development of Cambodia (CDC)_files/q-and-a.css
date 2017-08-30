@@ -1,0 +1,20 @@
+div.entry-content p.faq-catname {margin: 0 0 5px 0; font-weight: bold;}
+div.faq-title {	font-style: normal;	margin:  0 0 10px 0;padding:0px !important;}
+div.faq-answer {margin: 0 0 20px 15px;display: none;}
+div#posts_faq-3 .leftright{ 
+	min-height: 154px;
+	margin-bottom: 7px;
+	#margin-bottom: 0px;
+	padding-left:7px;
+}
+
+.postwidget img{border:2px solid #706e6e;}
+.postwidget{border-bottom:2px solid #F0EEBE;}
+.leftright {
+	border-left: 1px solid #AEAEAE;
+	border-right: 1px solid #AEAEAE;
+	margin-left: 2px;
+	margin-top: -5px;
+	width: 298px !important;
+}
+.leftright .faq-answer{font-size:12px;font-weight:normal;}

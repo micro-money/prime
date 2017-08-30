@@ -1,0 +1,139 @@
+#google_language_translator {
+  min-height:36px;
+  clear:none !important;
+  text-align:left !important;
+}
+#flags{float:left !important;
+width:auto !important;
+padding-right: 5px;}
+
+select.goog-te-combo { 
+  width:205px !important;
+  background:#fff;
+  box-shadow:none !important; 
+  -moz-box-shadow:none !important; 
+  -webkit-box-shadow:none !important; 
+  padding:3px !important; 
+  height:auto !important; 
+  border:1px solid lightgray !important; 
+  border-radius:0px !important; 
+  -webkit-border-radius:0px; 
+  -moz-border-radius:0px !important; 
+}
+
+.goog-te-gadget {
+  color:#444;
+  font-size:11px;
+  font-family:"Arial",sans,sans-serif;
+}
+
+.goog-te-gadget img {
+  vertical-align:middle;
+}
+
+select.goog-te-combo:focus { 
+  box-shadow:none !important; 
+  -moz-box-shadow:none !important; 
+  -webkit-box-shadow:none !important; 
+}
+
+.metabox-holder {
+  width:65%;
+  float:left;
+}
+
+.metabox-holder h2 {
+  margin-bottom:18px; 
+}
+
+.submit { 
+  padding:0px;
+}
+
+.form-table th {
+  width:50%; 
+}
+
+td.advanced { 
+  padding-top:0px;
+  padding-bottom:0px;
+}
+
+p.hello { 
+  font-size:12px; 
+  color:darkgray; 
+}
+
+.flag{
+	font-size:16px;
+	padding:1px 0;
+}
+
+.flag img,.alt_flag img{
+	border:0px !important;
+	margin-top:8px !important;
+    padding:0px !important;
+}
+
+.attribution {
+    width:152px; 
+	line-height:1em;
+	margin-top:4px;
+}
+
+span.goog-branding {
+    font-size: 11px;
+    font-family: arial;
+    color: rgb(102, 102, 102);
+    white-space: nowrap;
+    padding-top: 4px;
+    text-align: left;
+    width: 150px;
+    margin-top: 2px;
+    left:170px;
+    z-index: 9999;
+    float: right;
+}
+
+.goog-logo-link, .goog-logo-link:link, .goog-logo-link:visited, .goog-logo-link:hover, .goog-logo-link:active {
+    font-size: 12px;
+    font-weight: bold;
+    color: rgb(68, 68, 68);
+    text-decoration: none;
+    line-height:0.8em;
+}
+
+span.goog-branding img {
+    float: left;
+    margin:0px;
+    width: 37px;
+  
+}
+
+span.vertical-translator {
+    position:auto; 
+    float:none !important; 
+    font-size: 11px;
+    font-family: arial;
+    color: rgb(102, 102, 102);
+    white-space: nowrap;
+    vertical-align: middle;
+    padding-top: 4px;
+    text-align: left;
+    width: 150px;
+    margin-top: 2px;
+    right: -50px;
+    z-index: 9999;
+}
+
+.tool-items .flag img {
+    margin-top:1px !important;
+}
+
+.tool-items .flag {
+    padding:0px !important;
+}
+
+.tool-container { 
+    line-height:1;
+}

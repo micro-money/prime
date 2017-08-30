@@ -1,0 +1,80 @@
+/* Custom Styles For The Social Media Widget Icons */
+
+.socialmedia-buttons {
+	margin-top: 5px;
+}
+
+.smw_left {
+	text-align: left;
+}
+
+.smw_center {
+	text-align: center;
+}
+
+.smw_right {
+	text-align: right;
+}
+
+li.Social_Widget a {
+	padding: 0 !important;
+	margin: 0 !important;
+	background: none !important;
+}
+	
+.socialmedia-buttons img {
+	border: 0;
+	border: 0 !important;
+	margin-right: 10px !important;
+	display: inline;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	transition: all 0.2s ease;
+}
+
+.socialmedia-buttons a {
+	background: none !important;
+}
+
+.socialmedia-buttons a:hover {
+	text-decoration: none;
+	border: 0;
+}
+.socialmedia-buttons img.fade:hover {
+	opacity: 1 !important;
+	-moz-opacity: 1 !important;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	transition: all 0.2s ease;
+}
+
+.socialmedia-buttons img.scale:hover {
+	-moz-transform: scale(1.2);
+	-webkit-transform: scale(1.2);
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	-ms-zoom: 1.2;
+	transition: all 0.2s ease;
+}
+	
+.socialmedia-buttons img.bounce:hover {
+	transform: translate(0px, -2px);
+	-moz-transform: translate(0px, -2px);
+	-webkit-transform: translate(0px, -2px);
+	-webkit-transition: -webkit-transform 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	transition: all 0.2s ease;
+	
+}
+
+.socialmedia-buttons img.combo:hover {
+	transform: translate(0px, -4px);
+	-moz-transform: scale(1.1) translate(0px, -4px);
+	-webkit-transform: scale(1.1) translate(0px, -4px);
+	-ms-zoom: 1.1;
+	opacity: 1 !important;
+	-moz-opacity: 1 !important;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	transition: all 0.2s ease;
+}
