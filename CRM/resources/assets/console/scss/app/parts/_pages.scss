@@ -1,0 +1,35 @@
+// Clean
+.clean-wrapper {
+	background: $background-color-dark;
+	min-width: $clean-min-width;
+	max-width: $clean-max-width;
+	width: 100%;
+	padding: $clean-padding;
+	margin: 40px auto;
+}
+.clean-logo {
+	display: block;
+	background: url(../images/branding/logo.png) no-repeat 0 0;
+	background-size: 200px;
+	width: 200px;
+	height: 20px;
+	margin: auto;
+}
+.clean-footer {
+	color: #fff;
+	opacity: 0.1;
+	margin: 0 0 40px;
+}
+@media only screen and (max-width: $clean-max-width) {
+	.clean-wrapper {
+		margin: 0 0 40px;
+	}
+}
+
+// Login
+.login-links a {
+	opacity: 0.5;
+}
+.login-links a:hover {
+	opacity: 1;
+}

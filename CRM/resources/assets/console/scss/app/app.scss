@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+// Mixins
+// @import "components/prefixer";
+// @import "components/mixins";
+@import "../vendor/materialize/components/color";
+@import "../vendor/materialize/components/variables";
+
+// Variables;
+@import "components/variables";
+
+// Components
+@import "components/layout";
+@import "components/fonts";
+@import "components/icons";
+@import "components/forms";
+@import "components/buttons";
+
+// Common
+@import "parts/common";
+@import "parts/parts";
+@import "parts/pages";
+@import "parts/windows";
+
+// Pages
+@import "pages/collection.activity";

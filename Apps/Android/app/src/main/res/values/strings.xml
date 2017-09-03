@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Micromoney</string>
+    <string name="error_app_not_found">No suitable app found!</string>
+</resources>

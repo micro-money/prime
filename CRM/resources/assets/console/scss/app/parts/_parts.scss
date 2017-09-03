@@ -1,0 +1,54 @@
+// Loan life
+.b-lifescape {
+	border: 1px $primary-color-light solid;
+	position: relative;
+	width: 100%;
+	height: 8px;
+	border-radius: 4px;
+	overflow: hidden;
+}
+.b-lifescape-bar {
+	position: relative;
+	left: 0;
+	top: 0;
+	height: 8px;
+}
+.b-lifescape-bar--green {
+	background: $success-color;
+}
+.b-lifescape-bar--blue {
+	background: $progress-bar-color;
+}
+	
+	// Notifications statuses
+.b-notifications {
+	width: 100%;
+}
+.b-notifications-item {
+	text-align: center;
+	width: auto;
+	padding: 12px;
+}
+.b-notifications.bn-2 .b-notifications-item { width: 50%; }
+.b-notifications.bn-3 .b-notifications-item { width: 33.33%; }
+.b-notifications.bn-4 .b-notifications-item { width: 25%; }
+.b-notifications.bn-5 .b-notifications-item { width: 20%; }
+.b-notifications.bn-6 .b-notifications-item { width: 16.67%; }
+.b-notifications-item-name {
+	color: $primary-color-light;
+	margin: 0 0 4px;
+}
+.b-notifications-item-status {
+	display: block;
+	color: $primary-color;
+	width: 100%;
+	height: 24px;
+	font-size: 12px;
+	line-height: 24px;
+	border-radius: 3px;
+}
+.bnis-copy { @extend .blue; color: #fff; cursor: pointer; }
+.bnis-processing { @extend .lime, .lighten-2; }
+.bnis-sent { @extend .light-green; color: #fff; }
+.bnis-delivered { @extend .green; color: #fff; }
+.bnis-error { @extend .red, .darken-4; color: #fff; cursor: help; }

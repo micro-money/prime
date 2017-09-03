@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "994002621326",
+    "firebase_url": "https://micromoney-c0622.firebaseio.com",
+    "project_id": "micromoney-c0622",
+    "storage_bucket": "micromoney-c0622.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994002621326:android:028f3d4c85a5baa3",
+        "android_client_info": {
+          "package_name": "mm.com.money"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "994002621326-r2nhislotf62e9290et0ir4q3au74si9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mm.com.money",
+            "certificate_hash": "aeb09aed3a4f583650f0143f1b05d57cfc54064e"
+          }
+        },
+        {
+          "client_id": "994002621326-3irk9b500do9j78v6pjbl6qjelnhj0f9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArsb7zjV3C8L-w-yt6F4Raq7jbG90rmkE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "994002621326-3irk9b500do9j78v6pjbl6qjelnhj0f9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,204 @@
+// Margins
+.mt50p { margin-top: 50% !important; }
+.mt40p { margin-top: 40% !important; }
+.mt30p { margin-top: 30% !important; }
+.mt20p { margin-top: 20% !important; }
+.mt10p { margin-top: 10% !important; }
+.mt100 { margin-top: 100px !important; }
+.mt60 { margin-top: 60px !important; }
+.mt30 { margin-top: 30px !important; }
+.mt20 { margin-top: 20px !important; }
+.mt10 { margin-top: 10px !important; }
+.mt0 { margin-top: 0 !important; }
+.mr50 { margin-right: 50px; }
+.mr40 { margin-right: 40px; }
+.mr30 { margin-right: 30px; }
+.mr20 { margin-right: 20px; }
+.mr10 { margin-right: 10px; }
+.mb50p { margin-bottom: 50% !important; }
+.mb40p { margin-bottom: 40% !important; }
+.mb30p { margin-bottom: 30% !important; }
+.mb20p { margin-bottom: 20% !important; }
+.mb10p { margin-bottom: 10% !important; }
+.mb100 { margin-bottom: 100px !important; }
+.mb60 { margin-bottom: 60px !important; }
+.mb30 { margin-bottom: 30px !important; }
+.mb20 { margin-bottom: 20px !important; }
+.mb10 { margin-bottom: 10px !important; }
+.mb0 { margin-bottom: 0 !important; }
+.ml50 { margin-left: 50px; }
+.ml40 { margin-left: 40px; }
+.ml30 { margin-left: 30px; }
+.ml20 { margin-left: 20px; }
+.ml10 { margin-left: 10px; }
+.m0 { margin: 0 !important; }
+
+// Layout
+html {
+	background: $background-color;
+	min-height: 100%;
+	min-height: 600px;
+}
+body {
+	display: flex;
+	min-height: 600px;
+	flex-direction: column;
+}
+.wrapper {
+	width: 912px;
+	margin: 0 auto;
+	padding: 0 24px;
+}
+// Header
+.header {
+	background: $background-color-dark;
+	width: 100%;
+	height: 80px;
+	line-height: 80px;
+	overflow: hidden;
+}
+.header-logo {
+	display: inline-block;
+	background: url(../images/branding/logo.png) no-repeat 0 0;
+	background-size: 150px;
+	width: 150px;
+	height: 15px;
+	vertical-align: middle;
+	margin: 0 0 0 24px;
+}
+.header-profile {
+	float: right;
+	background-color: #00263E;
+	padding: 0 24px;
+}
+.header-profile-info {
+	cursor: pointer;
+	color: #fff;
+	display: block;
+	max-width: 240px;
+	padding: 24px 24px 0 0;
+	line-height: 1;
+	text-decoration: none;
+}
+.header-profile-info-name, .header-profile-info-role {
+	white-space: nowrap;
+	overflow: hidden;
+	-ms-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	line-height: 18px;
+}
+.header-profile-info-name {
+	font-size: 18px;
+}
+.header-profile-info-role {
+	opacity: 0.5;
+}
+.header-profile-links-exit {
+	display: block;
+	color: $link-color;
+	margin: 2px 0 0;
+}
+.header-profile-links-exit i.mdi {
+	margin: 0;
+}
+// Sidebar
+.sidebar {
+	background: $background-color-dark;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 240px;
+	height: 100%;
+}
+.sidebar-logo {
+	display: block;
+	background: url(../images/branding/logo.png) no-repeat 0 0;
+	background-size: 150px;
+	width: 150px;
+	height: 15px;
+	margin: 45px auto;
+}
+.sidebar-menu-wrapper ul li a {
+	color: #fff;
+	opacity: 0.5;
+	display: block;
+	padding: 0 24px;
+	line-height: 40px;
+	text-decoration: none;
+	font-weight: 400;
+}
+.sidebar-menu-wrapper ul li.active a {
+	opacity: 1;
+	background: $background-color;
+}
+.sidebar-menu-wrapper i.mdi {
+	font-size: 20px;
+}
+.sidebar-profile {
+	position: absolute;
+	bottom: 20px;
+	width: 240px;
+}
+.sidebar-profile-links {
+	padding: 0 24px;
+	text-align: center;
+}
+.sidebar-profile-links a {
+	color: #fff;
+	opacity: 0.3;
+	text-decoration: none;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-ms-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+.sidebar-profile-links a:hover {
+	opacity: 1;
+}
+// Content
+.content {
+	padding-left: 240px;
+	min-height: 500px;
+}
+.content.vertical {
+	padding-left: 0;
+	min-height: 0;
+}
+.content-inner {
+	padding: 20px 0 0;
+	position: relative;
+}
+.content.vertical .content-inner {
+	padding: 0;
+}
+.content-window {
+	background: #fff;
+	padding: 24px;
+	margin: 0 0 24px;
+	box-shadow: 2px 4px 20px rgba(0, 0, 0, 0.35);
+	-webkit-border-radius: $button-radius;
+	-moz-border-radius: $button-radius;
+	border-radius: $button-radius;
+}
+.content-window-header h1 {
+	margin: 0;
+}
+.content-window-main {
+	border-top: 2px $table-border-color solid;
+	margin: 24px 0 0;
+	padding: 24px 0 0;
+}
+@media #{$medium-and-down} {
+	.content {
+		padding-left: 0;
+	}
+}
+// Copyright
+.content-copyright {
+	color: #fff;
+	opacity: 0.2;
+	font-size: 12px;
+	font-weight: 400;
+	padding: 0 0 20px;
+}

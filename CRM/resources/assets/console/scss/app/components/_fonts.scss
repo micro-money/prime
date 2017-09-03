@@ -1,0 +1,14 @@
+$title-letter-spacing: 0.05em;
+
+html {
+	font-family: 'Ubuntu', sans-serif;
+	font-weight: 400;
+	-webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+	margin: 0 0 20px;
+	text-align: left;
+	font-weight: 300;
+	letter-spacing: $title-letter-spacing;
+}

@@ -1,0 +1,21 @@
+// Pagination
+.pagination {
+	text-align: center;
+}
+.pagination li {
+	display: inline-block;
+	min-width: 30px;
+	line-height: 30px;
+}
+.pagination li a {
+	display: inline-block;
+	text-decoration: none !important;
+}
+.pagination li i {
+	font-size: 1.4em;
+	margin: 0;
+}
+.pagination li.active {
+	color: #fff;
+	background: $background-color-dark;
+}

@@ -1,0 +1,45 @@
+// AJAX
+form.ajax .ajax-message, .message {
+	display: block;
+	background: lighten($primary-color-light, 10%);
+	padding: 1rem;
+	margin: 0 0 20px;
+	-webkit-border-radius: $button-radius;
+	-moz-border-radius: $button-radius;
+	border-radius: $button-radius;
+}
+form.ajax .ajax-message--success, .message--success {
+	color: #fff;
+	background-color: $success-color;
+}
+form.ajax .ajax-message--error, .message--error{
+	color: #fff;
+	background-color: $error-color;
+}
+
+// Full-page
+.content-form-wrapper {
+	background: #efefef;
+	padding: 20px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+// Inputs
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+	-webkit-text-fill-color: #fff;
+	-webkit-box-shadow: 0 0 0px 1000px $background-color-dark inset;
+	transition: background-color 5000s ease-in-out 0s;
+}
+
+// Windows
