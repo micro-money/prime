@@ -1,6 +1,6 @@
 console.log('custom_js_init2');
 
-function call_chmode(mode){		// Открываем отчет в нужном режиме согласно выбору
+function call_chmode(mode){		// ткываем отчет в нужном ежиме оглано выбоу
 	var modem=[
 	'','mode=daygr','mode=cimgr'
 	];

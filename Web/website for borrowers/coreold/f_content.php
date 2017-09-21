@@ -1,11 +1,11 @@
 <?php
 
-/* ФУНКЦИИ РАБОТЫ С ТЕКСТОВЫМ КОНТЕНТОМ */
+/*      */
 
-// Вставка выполняемого кода или виджета с передачей массива данных внутрь него
-// Переданный массив данных доступен внутри виджета как массив $v
-// Если передан не массив, а единственная переменная, то она доступна как $v, так и как $content
-// Формат файла - строго .php (окончание '.php' при вызове функции можно опустить)
+//           
+//         $v
+//    ,   ,     $v,    $content
+//   -  .php ( '.php'     )
 function execute($widget_path, $content = false) {
     global $page, $app, $user, $self,$countrym;
     $type = substr($widget_path, (strlen($widget_path) - 4), 4);
@@ -16,17 +16,17 @@ function execute($widget_path, $content = false) {
     else @require $full_path;
 }
 
-// Рендер файла с передачей массива данных внутрь него
-// Значения в переданном ассоциативном массиве заменяют вставки [[name]] в файле, где name - имя ключа массива
-// т.е. если в переданном массиве $array['foo'] = '123', то [[foo]] при рендеринге будет заменено на 123.
-// Формат (расширение) файла может быть любой - js, html и пр.
+//        
+//        [[name]]  ,  name -   
+// ..     $array['foo'] = '123',  [[foo]]      123.
+//  ()     - js, html  .
 function render($file_path, $v = []) {
     global $page, $app, $user, $self;
     if (strpos($file_path, '.') === false) $file_path = trim($file_path) . '.php';
     $file_content = file_get_contents(MC_ROOT . '/templates/' . $file_path);
     
 	/*
-	// Обработка вставок вида [[name]]
+	//    [[name]]
 	preg_match_all('/\/?\*?\[\[\s+([\w-_]+)\s+\]\]\*?\/?/i', $file_content, $matches);
     //dd($matches);
     if (!empty($matches[1]))
@@ -36,23 +36,23 @@ function render($file_path, $v = []) {
 	return $file_content;
 }
 
-// Вывод дампа переменной и остановка выполнения программы
+//       
 function dd($variable) {
     die ( nl2br( print_r( $variable, true ) ) );
 }
 
-// Вывод дампа переменной и остановка выполнения программы
+//       
 function dnd($variable) {
     echo ( nl2br( print_r( $variable, true ) ) );
 }
 
-// Подключение дополнительного ресурса с проверкой на дублирование
+//       
 function resource($path, $type = false) {
     global $page, $app, $user, $self;
     if (!is_array($path)) $paths = [$path];
     else $paths = $path;
     foreach ($paths as $path) {
-        // Если тип ресурса не указан, пытаемся определить его самостоятельно по последним 3 символам
+        //     ,       3 
         if ($type === false) $type_ = substr($path, (strlen($path) - 3), 3);
         else $type_ = $type;
         $type_ = strtolower($type_);
@@ -64,13 +64,13 @@ function resource($path, $type = false) {
             case '.js':
                 if (array_search($path, $page['js']) === false) $page['js'][] = $path; break;
 
-            default: /* Подключение скрипта из переменной, а не в виде файла */
+            default: /*    ,      */
                 $page['js_raw'] .= "$path\r\n";
         }
     }
 }
 
-// Вывод списка подключаемых стилей
+//    
 
 function getParOut($url){
 	$gom=explode('?',$url); return $gom[0];
@@ -79,7 +79,7 @@ function getParOut($url){
 function css_resources() {
     global $page, $app, $self;	 $r = '';
     $all_css=[]; //array will all css for minification
-    // Подключение дополнительных стилей для страницы, если они объявлены
+    //     ,   
     if (count($page['css'])) {
         foreach ($page['css'] as $css) {
             if (substr($css, 0, 4) == 'http') $r .= "<link rel=\"stylesheet\" href=\"$css\">\r\n";
@@ -113,7 +113,7 @@ function css_resources() {
             }
         }
     }
-    // Подключение индивидуального стиля с именем, равным имени страницы, если такой существует
+    //     ,   ,   
     $self_css=substr($self, 0, strlen($self) - 4).".css";
     $css_path = "/assets/css/" . $self_css ;
     if (file_exists( MC_ROOT . $css_path ))
@@ -132,12 +132,12 @@ function css_resources() {
     return '<link rel="stylesheet" href="'.minification($all_css,'css').'">';
 }
 
-// Вывод списка подключаемых JS
+//    JS
 function js_resources() {
     global $page, $self, $app;
     $r = '';
     $all_js=[]; //array will all js for minification
-    // Подключение дополнительных скриптов для страницы, если они объявлены
+    //     ,   
     if (count($page['js'])) {
         foreach ($page['js'] as $script) {
             if (substr($script, 0, 4) == 'http') $r .= "<script src=\"$script\"></script>\r\n";
@@ -171,7 +171,7 @@ function js_resources() {
             }
         }
     }
-    // Подключение индивидуального скрипта с именем, равным имени страницы, если такой существует
+    //     ,   ,   
     $self_js = substr($self, 0, strlen($self) - 4) . ".js";
     $script_path = "/assets/js/" . $self_js;
     if (file_exists( MC_ROOT . $script_path ))
@@ -184,7 +184,7 @@ function js_resources() {
             $all_js['names'][]=$self_js;
         }
     }
-    // js, не подключаемый из файла, а генерируемый "на лету"
+    // js,    ,   " "
     if (!empty($page['js_raw'])) {
         $r .= '<script type="text/javascript">' . "\r\n";
         $r .= $page['js_raw'];

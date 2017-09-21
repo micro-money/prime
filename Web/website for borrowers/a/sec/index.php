@@ -14,24 +14,24 @@ require_once(MC_ROOT.'/tool/uni_func.php');
 $report=''; $lh=''; $db='';
 
 /*
-	Алгоритм простая рекурсия по счету:
-	Телефон или Счет или Паспорт - Все ищем через счет.
+	    :
+	     -    .
 
-	Телефон - выводим все счета этого телефона
-	Счет просто приводим.
-	Паспорт - выводим все счета этого паспорта
+	 -     
+	  .
+	 -     
 
-	В ИТОГЕ ИМЕЕМ СЧЕТ(А) и понеслась рекурсия 
-РЕК	 снимаем всех пользователей у которых есть такие счета по application_baccount.user_id
-	 получаем список всех счетов этих пользователей сгруппированный .
-	 Фиксируем кол-во счетов.
+	   ()    
+	          application_baccount.user_id
+	        .
+	  - .
 	 
-РЕК	 Далее запрашиваем всех пользователей по этому списку + все счета этих пользователей и смотрим кол-во счетов 
-	 если счета добавились еще раз. Если нет стоп.
+	        +       -  
+	     .   .
 	 
-РЕК ...
+ ...
 	 
-	 На каждом обороте по счету фиксируем номер обхода.
+	        .
 */
 
 //$_POST['ChPhone']='09442157396';
@@ -51,17 +51,17 @@ if (!empty($_POST['ChBankAccount']) || !empty($_POST['ChPhone'])) {
 $report_table=[];
 if (!empty($_POST['ChBankAccount']) && count($report_table)==0) {
 	
-	# Делаем проверку по банковскому номеру
-	# Подготавливаем банковский номер на проверку - чистим его от букв
+	#     
+	#      -    
 	$bankaccs=onlyInList(array('o'=>$onlyDig,'s'=>$_POST['ChBankAccount']));
 	//die ("|".$_POST['ChBankAccount']."|");
 	if (strlen($bankaccs)>6) {
 		$lh.='<br>Input Bank Account : '.$bankaccs;
-		# Получаем все телефоны по этому счету
+		#      
 		$rq="SELECT phone as id FROM un_acc as a where val='$bankaccs' group by 1";
 		$phones = db_array($rq);
 		if (count($phones)>0) {	
-			# Ищем всех юзеров которые использовали этот счет , далее ищем всех юзеров которые использовали эти счета
+			#        ,        
 			$omf=getLinks(['phones'=>$phones,'cheks'=>getPostCheck()]); 
 		} else {
 			$rstr=' was not found in database';
@@ -74,15 +74,15 @@ if (!empty($_POST['ChBankAccount']) && count($report_table)==0) {
 
 if (!empty($_POST['ChPhone']) && count($report_table)==0) {
 
-	# Делаем проверку по телефону
-	# Форматируем телефон
+	#    
+	#  
 	$fphone=onlyInList(array('o'=>$onlyDig,'s'=>$_POST['ChPhone']));
 	$lh.='<br>Input Phone Number : '.$fphone;
-	# Получаем все ключевые телефоны с этим номером
+	#       
 	$qw="SELECT phone as id FROM un_tel WHERE val='$fphone' group by 1";
 	$phones = db_array($qw);
 
-	# Ищем всех юзеров которые использовали этот счет , далее ищем всех юзеров которые использовали эти счета
+	#        ,        
 	if (count($phones)>0) {
 		$omf=getLinks(['phones'=>$phones,'cheks'=>getPostCheck()]);  //  ,'cheks'=>['un_acc','un_nrc','un_imei']
 	} else {
@@ -91,9 +91,9 @@ if (!empty($_POST['ChPhone']) && count($report_table)==0) {
 }
 
 if ((!empty($_POST['ChNrc']) || !empty($_POST['ChNrcD'])) && count($report_table)==0) {
-	# Делаем проверку по номеру паспорта
-	# Форматируем паспорт
-	# Подготавливаем рабочий массив форматирования
+	#     
+	#  
+	#    
 	 
 	if (!empty($_POST['ChNrcD']) && empty($_POST['ChNrc'])) {
 		$nrcmode=1;
@@ -105,12 +105,12 @@ if ((!empty($_POST['ChNrc']) || !empty($_POST['ChNrcD'])) && count($report_table
 	
 	$bw=getMmToEngFormatArray();
 	$nrcorig=mysql_real_escape_string($_POST[$nrcp]);
-	# Форматируем ID , если да то ФОРМАТ, если скрипт сомневается тогда -> Оригинал
+	#  ID ,    ,     -> 
 	$fm=FormatMmPersId(['bw'=>$bw,'mmid'=>$_POST[$nrcp]]);
 	#if ($nrcmode==1) $fm['fin']=onlyInList(array('o'=>$onlyDig,'s'=>$fm['fin']));
 	$_POST[$nrcp]=$fm['fin'];
 	$fnrc=mysql_real_escape_string($fm['fin']);
-	# Получаем все счета за этим паспортом
+	#      
 	
 	/*
 	$nrcqvery="LCASE(u.UsrMMPersonalID) in (LCASE('$fnrc'),LCASE('$nrcorig'))";
@@ -126,7 +126,7 @@ if ((!empty($_POST['ChNrc']) || !empty($_POST['ChNrcD'])) && count($report_table
 	$rq="SELECT phone as id FROM un_nrcf where val='$fnrc' group by 1";
 	$phones = db_array($rq);
 	
-	# Ищем всех юзеров которые использовали этот счет , далее ищем всех юзеров которые использовали эти счета
+	#        ,        
 	if (count($phones)>0) {
 		$omf=getLinks(['phones'=>$phones,'cheks'=>getPostCheck()]);
 	} else {
@@ -176,7 +176,7 @@ if (isset($omf)) if (count($omf['rt'])>0 || count($omf['lt'])>0 || isset($rstr) 
 	} 			
 }
 
-/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
+/* --------------------------  ------------ */ ob_start(); ?>
     <div class="container-fluid">
 	<div class="row">
         <h2 class="alert-danger">Beta version in testing</h2>

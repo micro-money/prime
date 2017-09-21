@@ -1,6 +1,6 @@
 <?php $backend_environment = TRUE; $ShowErr=1; 
 require_once($_SERVER['DOCUMENT_ROOT'].'/config.php'); 
-/* ----------------------- ПАРАМЕТРЫ СТРАНИЦЫ ----------------------- */
+/* -----------------------   ----------------------- */
 $page['title'] = 'Login';  $page['desc'] = 'Acoount login';
 
 $ttt1='';
@@ -11,7 +11,7 @@ if ( isset($user['role'])) {
 
 if ($ttt1!='') { header("Location: ".$ttt1); exit; }
 
-/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
+/* --------------------------  ------------ */ ob_start(); ?>
 <div class="form-block center-block">
     <h2 class="title">Log In</h2>
     <hr>

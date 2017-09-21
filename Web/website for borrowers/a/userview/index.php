@@ -9,21 +9,21 @@ $page['title'] = 'Cu #'.$user_id.' info';
 $page['desc'] = 'Edit customer infomation';
 		
 /*
-Будет три вкладки:
-1. Первонеобходимые параметры
-2. Оставшиеся параметры на редактирование
-3. Статусная и не редактируемая информация
+  :
+1.  
+2.    
+3.     
 */
 
 require_once($dr.'/a/set_userview.php');
 
-require_once($dr.'/tool/sas/stage1_settings.php');  				# Создаем динамические элементы (включая необходимые запросы в базу и прочая нагрузочная часть)
-if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');		# Аякс работа если есть
-require_once($dr.'/tool/sas/stage2_build_elements.php');			# Выполняем запросы к базе данных и строим html у динамических элементов
+require_once($dr.'/tool/sas/stage1_settings.php');  				#    (        )
+if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');		#    
+require_once($dr.'/tool/sas/stage2_build_elements.php');			#        html   
 
 $cuname=$sas_sqlm['m']['uname'].' ['.$sas_sqlm['m']['ulogin'].']';
 
-/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
+/* --------------------------  ------------ */ ob_start(); ?>
 	<div class="container-fluid" style="margin-top: -20px;">
 		<h2>Edit information for customer # <?= $user_id.' '.$cuname ?></h2>
 <? require_once($dr.'/a/tmpl/workleads.php'); ?>

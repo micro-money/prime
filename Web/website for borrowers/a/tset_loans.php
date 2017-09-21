@@ -1,7 +1,7 @@
 <?php 
 
 $cfsel=''; if ($curr_fil>-1) $cfsel=' AND lo.fil='.$curr_fil;
-$tset_loans=['gf'=>'sastabV1',				# ОБЯЗ: Имя функции конструктора элемента
+$tset_loans=['gf'=>'sastabV1',				# :    
 		'tl'=>	['loans'=>[
 				'c'=>['empty'=>['p'=>'empty','q'=>' '],'act'=>['fn'=>'Actions','p'=>'action','q'=>'(select 1)'],],
 				],],
@@ -9,15 +9,15 @@ $tset_loans=['gf'=>'sastabV1',				# ОБЯЗ: Имя функции констр
 		'qtl'=>[
 			'For user'=>'SELECT {(select)} FROM loans lo WHERE lo.uid={(user_id)} {(where)} {(group)} {(having)} {(order)} {(limit)}',
 		],
-		# Поля выбора (select fields)
+		#   (select fields)
 		'dl'=>10,
 		'setl'=>[
 			'Pipeline loans'=>['(w|n)'=>'lost|20|0'],
 			'Diff between Calc and CRM sendmoney'=>['(w|n)'=>'empty|wt1|e'],
 			#$j1=>['(g)'=>'1'],
 			],
-		'wtmpl'=>[	# Группировка всегда сначала новые
-				'wt1'=>['t'=>'(lo.UsrMoneySendedAmount!=lo.a_fmsa or lo.UsrMoneySendedDate!=lo.a_fmsd) AND lo.a_rdate>"2001-01-01"'],	# Только nrc + банк которые еще не проверялись на документ
+		'wtmpl'=>[	#    
+				'wt1'=>['t'=>'(lo.UsrMoneySendedAmount!=lo.a_fmsa or lo.UsrMoneySendedDate!=lo.a_fmsd) AND lo.a_rdate>"2001-01-01"'],	#  nrc +       
 				],
 		#'setd'=>'Diff between Calc and CRM sendmoney',	
 		'filter'=>[

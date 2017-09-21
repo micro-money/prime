@@ -8,10 +8,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) { $lid=intval($_GET['id']); }
 
 $page['title'] = 'Lead #'.$lid.' info'; $page['desc'] = 'Lead infomation';
 
-# Устанавливаем подробную информацию по лиду на первое место ($fdata->$fd)
+#         ($fdata->$fd)
 
-require_once('cajx.php');										# Подключаем кастомную обработку аякса
-$page['js'][] = $hn.$selfc.'m.js?ver='.$jsver;					# Подключаем персональный js
+require_once('cajx.php');										#    
+$page['js'][] = $hn.$selfc.'m.js?ver='.$jsver;					#   js
 	
 // ==========
 require_once($dr.'/a/set_lead.php');
@@ -25,7 +25,7 @@ if ($user['role']!='supers') {
 	';
 }
 
-function disableEdit($e){ # Отменяем все редактирование
+function disableEdit($e){ #   
 	if (isset($e['fs'])) {
 		foreach ($e['fs'] as $k=>$v) {
 			if (isset($v['e'])) unset($e['fs']['e']);
@@ -34,14 +34,14 @@ function disableEdit($e){ # Отменяем все редактирование
 	return $e;
 }
 
-require_once($dr.'/tool/sas/stage1_settings.php');  			# Создаем динамические элементы (включая необходимые запросы в базу и прочая нагрузочная часть)
-if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');	# Аякс работа если есть
-require_once($dr.'/tool/sas/stage2_build_elements.php');		# Выполняем запросы к базе данных и строим html у динамических элементов
+require_once($dr.'/tool/sas/stage1_settings.php');  			#    (        )
+if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');	#    
+require_once($dr.'/tool/sas/stage2_build_elements.php');		#        html   
 
 $cuname=$sas_sqlm['m']['uname'];
 $MainPhone=$sas_sqlm['m']['ulogin'];
 
-/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
+/* --------------------------  ------------ */ ob_start(); ?>
 	<div class="container-fluid" style="margin-top: -20px;">
 		<div class="row">
 			<div class="col-12">

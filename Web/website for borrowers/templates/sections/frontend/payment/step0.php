@@ -43,7 +43,7 @@
 
 						<?
 						/*
-Старые переводы:
+ :
 you have a debt
 Please pay now and attach your payment proof.
 bank payment slip
@@ -87,9 +87,9 @@ Call to hotline: <a href="tel:+959972600591">+95 9 972 600 591</a>,  <a href="te
 
 						*/
 						
-						$ss_eladd='';   		// Дополнительная вставка в элемент ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет
-						$ss_cladd='required ';	// Дополнительная вставка в класс ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет
-						$ss_req=1; 				// Вывод HTML элемента - Обязательное поле
+						$ss_eladd='';   		//         
+						$ss_cladd='required ';	//         
+						$ss_req=1; 				//  HTML  -  
 						
 						$ss_lname='Photo of your payment proof document';
 						$ss_fname='photo1';

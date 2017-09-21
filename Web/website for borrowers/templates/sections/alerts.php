@@ -1,6 +1,6 @@
 <?php
 
-/* ИНФОРМАЦИОННЫЕ УВЕДОМЛЕНИЯ В ВЕРХНЕЙ ЧАСТИ СТРАНИЦЫ */
+/*       */
 
 if (!empty($page['success_msg'])) {$ah_m=ah_addl($page['success_msg']); e('bootstrap3/alert', ['class' => 'success', 'msg' =>$ah_m ]); }
 if (!empty($page['error_msg'])) {$ah_m=ah_addl($page['error_msg']); e('bootstrap3/alert', ['class' => 'danger', 'msg' => $ah_m]); }

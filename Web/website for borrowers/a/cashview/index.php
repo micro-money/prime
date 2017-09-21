@@ -8,27 +8,27 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) { $cash=intval($_GET['id']); 
 
 $page['title'] = 'Cash #'.$cash.' info'; $page['desc'] = 'Cash infomation';
 
-# Устанавливаем подробную информацию по лиду на первое место ($fdata->$fd)
+#         ($fdata->$fd)
 	
 // ==========
 require_once($dr.'/a/set_cash.php');
 require_once($dr.'/a/set_userview.php');
 
-# Супер админ может исправить операционный день платежа при условии что он еще не наступил
-# Все остальные могут исправлять только вторым чеком.
+#              
+#       .
 if ($user['role']=='super') {
 	// 'moperday'
-	// Не делаем этого т.к. это сложно - все проблемы пусть пускают через меня. я поправлю.
+	//    ..   -      .  .
 }
 
-require_once($dr.'/tool/sas/stage1_settings.php');  				# Создаем динамические элементы (включая необходимые запросы в базу и прочая нагрузочная часть)
-if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				# Аякс работа если есть
-require_once($dr.'/tool/sas/stage2_build_elements.php');			# Выполняем запросы к базе данных и строим html у динамических элементов
+require_once($dr.'/tool/sas/stage1_settings.php');  				#    (        )
+if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				#    
+require_once($dr.'/tool/sas/stage2_build_elements.php');			#        html   
 
 		$cuname=$sas_sqlm['m']['uname'];
 		$MainPhone=$sas_sqlm['m']['ulogin'];
 
-/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
+/* --------------------------  ------------ */ ob_start(); ?>
 	<div class="container-fluid" style="margin-top: -20px;">
 		<div class="row">
 			<div class="col-12">

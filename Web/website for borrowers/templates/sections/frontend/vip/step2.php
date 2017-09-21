@@ -68,7 +68,7 @@
 
 <? 
 /*
-Старое
+
 We receive your loan application. Please wait for a call from us. This usually takes up to 2 days due to the queue. The money is waiting for you!
 */
 ?>

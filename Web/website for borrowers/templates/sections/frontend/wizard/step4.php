@@ -15,9 +15,9 @@
                     </div>
                     <form class="simple_form form-horizontal" role="form" id="form-step-01" autocomplete="off" novalidate="novalidate" action="<?= $this_wizard_name ?>" accept-charset="UTF-8" method="post" enctype="multipart/form-data">
 						<?
-						$ss_eladd='';   // Дополнительная вставка в элемент ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет
-						// Дополнительная вставка в класс ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет
-						// Вывод HTML элемента - Обязательное поле
+						$ss_eladd='';   //         
+						//         
+						//  HTML  -  
 						// Please make a photo of your bank account number (safe account or check book)
 						if (!isset($lead['s'][1])) {
 							$ss_lname='Photo of your bank account number.';

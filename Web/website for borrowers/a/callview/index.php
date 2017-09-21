@@ -7,12 +7,12 @@ require_once($dr.'/a/access.php');
 if (isset($_GET['id']) && is_numeric($_GET['id'])) { $call_id=intval($_GET['id']); } else { die('need call id'); } 
 $page['title'] = 'Call #'.$call_id.' info'; $page['desc'] = 'Call full details';
 
-include($dr.'/a/tset_calls.php');	$t=$tset_calls;		# Звонки клиенту
+include($dr.'/a/tset_calls.php');	$t=$tset_calls;		#  
 
-$t['htname']='Call details';					# Заголовок для закладки
-$t['mf']=['viewMode'=>'tabVert',];				# Вертикалим таблицу
-$t['tkol']=1;									# Сброс запроса на общее количество строк
-$t['wd']=['fd(w|n)'=>'ukid|'.$call_id.'|0']; 	# Ставим условие запроса конкретного звонка
+$t['htname']='Call details';					#   
+$t['mf']=['viewMode'=>'tabVert',];				#  
+$t['tkol']=1;									#      
+$t['wd']=['fd(w|n)'=>'ukid|'.$call_id.'|0']; 	#     
 
 if (empty($t['fe'])) $t['fe']=[];
 $t['fe'][]='ival_ukuid';
@@ -28,13 +28,13 @@ function ival_ukuid($w){
 
 require_once($dr.'/a/set_userview.php');
 	
-require_once($dr.'/tool/sas/stage1_settings.php');  				# Создаем динамические элементы (включая необходимые запросы в базу и прочая нагрузочная часть)
-if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				# Аякс работа если есть
-require_once($dr.'/tool/sas/stage2_build_elements.php');			# Выполняем запросы к базе данных и строим html у динамических элементов
+require_once($dr.'/tool/sas/stage1_settings.php');  				#    (        )
+if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				#    
+require_once($dr.'/tool/sas/stage2_build_elements.php');			#        html   
 
 $cuname=$sas_sqlm['m']['uname'].' ['.$sas_sqlm['m']['ulogin'].']';
 
-/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
+/* --------------------------  ------------ */ ob_start(); ?>
 	<div class="container-fluid" style="margin-top: -20px;">
 		<h2>Call #<?= $call_id ?> details to the customer <?= $cuname ?></h2>
 <? require_once($dr.'/a/tmpl/workleads.php'); ?>

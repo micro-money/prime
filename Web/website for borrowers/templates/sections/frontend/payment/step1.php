@@ -26,7 +26,7 @@
 							</p>
                         <?
 						/*
-						Старое убрал 
+						  
 						We receive your payment documents scan. Please wait for a call from us.
 Dear {#Contact.Name}
 Thanks for using Micromoney!

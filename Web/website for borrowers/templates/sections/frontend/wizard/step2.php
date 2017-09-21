@@ -16,9 +16,9 @@
                     <form class="simple_form form-horizontal" role="form" id="form-step-01" autocomplete="off" novalidate="novalidate" action="<?= $this_wizard_name ?>" accept-charset="UTF-8" method="post">
 						
 						<?
-						$ss_eladd='';   		// Дополнительная вставка в элемент ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет						
-						$ss_cladd='required ';	// Дополнительная вставка в класс ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет
-						$ss_req=1; 				// Вывод HTML элемента - Обязательное поле  
+						$ss_eladd='';   		//         						
+						$ss_cladd='required ';	//         
+						$ss_req=1; 				//  HTML  -    
 												
 						if (!isset($lead['c']['1-1'])) {
 							$ss_lname='Emergency Contact Person Name';

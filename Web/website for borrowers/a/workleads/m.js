@@ -1,7 +1,7 @@
 /**/console.log('custom_js_init');
 
 function fastbutton(cst){	
-	// подставляем кастомный который выполнит апдайт и вернется с перезагрузкой
+	// подтавляем катомный котоый выполнит апдайт и венетя  пеезагузкой
 	var cel=$("[cajx_lid]")[0];
 	var lid=$(cel).attr('cajx_lid');	
 	var nct=document.getElementById("NextCallTime").value; 
@@ -11,7 +11,7 @@ function fastbutton(cst){
 }
 
 function chNextCall(el){
-	// меняем селектор выбора времени , если значение не ноль показывает chNextCall, если ноль то скрываем
+	// меняем електо выбоа вемени , ели значение не ноль показывает chNextCall, ели ноль то кываем
 	var tv=el.value; var but=document.getElementById("NextCallBut");  
 	var d= 'inline-block';  if (tv==0) d= 'none'; 
 	but.style.display = d; 

@@ -7,19 +7,19 @@ $page['title'] = 'Customers list'; $page['desc'] = 'Customers list (users exclud
 
 require_once($dr.'/a/tset_calls.php'); 
 
-$dpel=['md'=>$tset_calls];			# Подключаем настроки списка анкет
+$dpel=['md'=>$tset_calls];			#    
 	
 /*
-Нужен отчет разворот для звонков по дням.
-Если нет даты то звонки показывают по датам
-РЕЖИМ 1: 
-Группировка по дням  :
-Дата , Сколько сделано звонков. 
-Группировка по дням + дата :
-Дата , Чемпион, Сколько сделано звонков. 
+      .
+       
+ 1: 
+    :
+ ,   . 
+   +  :
+ , ,   . 
 */
 
-#$page['js'][] = $hn.$selfp.'/m.js?ver='.$jsver;						# Подключаем персональный js
+#$page['js'][] = $hn.$selfp.'/m.js?ver='.$jsver;						#   js
 	# 'um(g)']='id|user_id'
 
 /*	
@@ -42,11 +42,11 @@ if (isset($_POST['Day'])) {
 	$_POST[$sas_el.'(w|n)']='ukdv'; $_POST[$sas_el.'(w|v)']=implode('-',$daym).'()'.implode('-',$dayt); $_POST[$sas_el.'(w|s)']='b';
 } 
 	
-require_once($dr.'/tool/sas/stage1_settings.php');  				# Создаем динамические элементы (включая необходимые запросы в базу и прочая нагрузочная часть)
-if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				# Аякс работа если есть
-require_once($dr.'/tool/sas/stage2_build_elements.php');			# Выполняем запросы к базе данных и строим html у динамических элементов
+require_once($dr.'/tool/sas/stage1_settings.php');  				#    (        )
+if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				#    
+require_once($dr.'/tool/sas/stage2_build_elements.php');			#        html   
 
-/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
+/* --------------------------  ------------ */ ob_start(); ?>
 <div class="container-fluid" style="margin-top: -20px;">
 		<div class="form-inline" style="padding: 5px;">
 			<div class="form-group"><span style="font-size: 30px;" >Call list</span></div>

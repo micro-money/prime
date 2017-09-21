@@ -1,14 +1,14 @@
 <?php
 
-/* Соединение с базой данных MySQL 
+/*     MySQL 
 
 $dbpnt = @mysql_connect($db['host'], $db['username'], $db['password']);
 $mysql_err = mysql_error();
-if (!$dbpnt) die("Не удалось подключиться к серверу MySQL<br />" . $mysql_err);
+if (!$dbpnt) die("     MySQL<br />" . $mysql_err);
 mysql_select_db($db['base'], $dbpnt);
 */
 
-# Первичный определитель базы данных 
+#     
 session_start();
 $dbase=$db['base']; #print_r($_SESSION); die();
 if (!isset($_SESSION['fil'])) $_SESSION['fil']=0; $curr_fil=$_SESSION['fil']; 
@@ -25,14 +25,14 @@ if (isset($_SESSION['dbase']) && isset($db['bases'][$_SESSION['dbase']]))  {
 
 if (!is_array($db['username'])) {
 	$dbpnt = @mysql_connect($db['host'], $db['username'], $db['password']);		$mysql_err = mysql_error();
-	if (!$dbpnt) die("Не удалось подключиться к серверу MySQL<br />" . $mysql_err);
+	if (!$dbpnt) die("     MySQL<br />" . $mysql_err);
 } else {
 	$x=0; while ($x<count($db['username'])) {
 		$dbpnt = @mysql_connect($db['host'], $db['username'][$x], $db['password'][$x]);		$mysql_err = mysql_error();
 		if ($dbpnt) { header("u1: ".$db['username'][$x]); $x=count($db['username']); }
 		$x++; 
 	}
-	if (!$dbpnt) die("Не удалось подключиться к серверу MySQL<br />" . $mysql_err);
+	if (!$dbpnt) die("     MySQL<br />" . $mysql_err);
 }
 
 mysql_select_db($dbase, $dbpnt);
@@ -42,9 +42,9 @@ mysql_query("set character_set_results='utf8'");
 mysql_query("set character_set_client='utf8'");
 mysql_query("set collation_connection='utf8_general_ci'");
 
-/* ОБРАБОТКА ВХОДНЫХ ДАННЫХ */
+/*    */
 
-// Получение текущего IP и адреса страницы
+//   IP   
 $ip = $_SERVER['REMOTE_ADDR'];      $ip_sql = mysql_real_escape_string($_SERVER['REMOTE_ADDR']);
 $br = $_SERVER['HTTP_USER_AGENT'];	$br_sql = mysql_real_escape_string($_SERVER['HTTP_USER_AGENT']);
 #$self = substr ($_SERVER['PHP_SELF'], 1);
@@ -56,16 +56,16 @@ $selfp=implode('/',$selfm);
 
 $r_get_def_country=0; 
 
-# Если нет страны в куках и нет подачи страны > по дефф
+#          >  
 if (!isset($_COOKIE['country']) && !isset($_GET['country']))  				$r_get_def_country=1;
-# Если есть в страна в куках но она не валидна > по дефф
+#           >  
 if (isset($_COOKIE['country']) && !isset($countrym[$_COOKIE['country']])) 	$r_get_def_country=1;
-# Если есть подача страны но она не валидна > по дефф
+#         >  
 if (isset($_GET['country']) && !isset($countrym[$_GET['country']]))  		$r_get_def_country=1;
 
-if ($r_get_def_country==1) $_GET['country']=$app['default_country']; 		# Если есть подача по дефф > ставим
+if ($r_get_def_country==1) $_GET['country']=$app['default_country']; 		#      > 
 
-if (isset($_GET['country'])) {	# Иниц страны
+if (isset($_GET['country'])) {	#  
 	setcookie('country', $_GET['country'], time() + $cooktime);  #86400 * 365
 	$_COOKIE['country'] = $_GET['country']; 
 } 
@@ -73,26 +73,26 @@ $app['current_country']		= $_COOKIE['country'];
 
 $r_get_def_language=0;
 
-# Если нет языка в куках и нет подачи языка > по дефф
+#          >  
 if (!isset($_COOKIE['language']) && !isset($_GET['language']))  							$r_get_def_language=1;
-# Если есть в язык в куках но он не валиден > по дефф
+#           >  
 if (isset($_COOKIE['language']) && 
 	!in_array( $_COOKIE['language'],$countrym[$app['current_country']]['l'])) 				$r_get_def_language=1;
-# Если есть подача языка но он не валидна > по дефф
+#         >  
 if (isset($_GET['language']) && 
 	!in_array( $_GET['language'],$countrym[$app['current_country']]['l'])) 					$r_get_def_language=1;
 	#    'default_language' => 'mm',  
-if ($r_get_def_language==1) $_GET['language']=$countrym[$app['current_country']]['l'][0]; 	# Если есть подача по дефф > ставим первый язык в текущей стране
+if ($r_get_def_language==1) $_GET['language']=$countrym[$app['current_country']]['l'][0]; 	#      >      
 
-if (isset($_GET['language'])) {	# Иниц языка
+if (isset($_GET['language'])) {	#  
 	setcookie('language', $_GET['language'], time() + $cooktime);  #86400 * 365
 	$_COOKIE['language'] = $_GET['language']; 
 } 
 $app['current_language'] 	= $_COOKIE['language'];
 
-/* ФУНКЦИИ ЗАПРОСОВ К БД */
+/*     */
 
-// Получение строки из таблицы (в виде ассоциативного массива)
+//     (   )
 function db_row ($query, $need_log = false) {
 	$ret = mysql_query($query);
 	$err = mysql_error();
@@ -106,7 +106,7 @@ function db_row ($query, $need_log = false) {
 	else return false;
 }
 
-// Получение массива строк, каждый элемент массива - ассоциативный массив с информацией из одной строки
+//   ,    -       
 function db_array ($query, $need_log = false) {
 	$ret = mysql_query($query);
 	$err = mysql_error();
@@ -123,7 +123,7 @@ function db_array ($query, $need_log = false) {
 	return $res;
 }
 
-// Получение результата выполнения из MySQL
+//     MySQL
 function db_result ($query, $need_log = false) {
 	$ret = mysql_query($query);
 	$err = mysql_error();
@@ -140,7 +140,7 @@ function db_result ($query, $need_log = false) {
 	else return false;
 }
 
-// Отправка произвольного запроса в MySQL, возвращает true / false
+//     MySQL,  true / false
 function db_request ($query, $need_log = false) {
 	$ret = mysql_query($query);
 	$err = mysql_error();
@@ -154,7 +154,7 @@ function db_request ($query, $need_log = false) {
 	else return false;
 }
 
-// Вставка строки в таблицу, возвращает id вставленной строки
+//    ,  id  
 function db_insert ($query, $need_log = false) {
 	$ret = mysql_query($query);
 	$err = mysql_error();
@@ -185,8 +185,8 @@ function db_insert_ar ($query, $need_log = false) {
 	else return false;
 }
 
-// Запись произвольного сообщения в лог. Второй параметр необязателен
-$app['log_message_mysql_row'] = 0; // ID строки в логе
+//     .   
+$app['log_message_mysql_row'] = 0; // ID   
 
 function f_log ($msg, $type = 'COMMON') {
     global $self, $app;
@@ -201,15 +201,15 @@ function f_log ($msg, $type = 'COMMON') {
     }
 }
 
-/* ФУНКЦИИ ЛОКАЛИЗАЦИИ */
+/*   */
 
 function l($phrase, $data = FALSE) {				// Return phrase on current language
     global $app;
     if (empty($phrase)) return '';
     $content = $phrase; 
-	$phrase_sql=mysql_real_escape_string($phrase);	// Если язык дефолтный, то не запрашиваем перевод из базы
+	$phrase_sql=mysql_real_escape_string($phrase);	//   ,      
 	if ($app['current_language'] != 'en') {
-        // Запрос перевода
+        //  
         $locale = db_row("SELECT * FROM `web_words` WHERE `en` = '$phrase' and `enable`=1");
         if (empty($locale['id'])) {
             db_request("INSERT IGNORE INTO `web_words` SET `mdkey` = MD5('$phrase_sql'), `en` = '$phrase_sql', `enable` = 0");
@@ -218,7 +218,7 @@ function l($phrase, $data = FALSE) {				// Return phrase on current language
         }
     }
     /*
-    if ($data !== FALSE && is_array($data)) {		// Замена тегов
+    if ($data !== FALSE && is_array($data)) {		//  
         // Render template tags, for example: [[name]]
         preg_match_all('/\/?\*?\[\[\s*([\w-_]+)\s*\]\]\*?\/?/iu', $content, $matches);
         if (!empty($matches[1])) {
@@ -229,8 +229,8 @@ function l($phrase, $data = FALSE) {				// Return phrase on current language
     return $content;
 }
 
-# Простейший апдайт без защиты от инъекций
-function arrToUpdate($mp) {	// Обновить update users set st=2 where id=100 > arrToUpdate(['t'=>'loans','u'=>['st'=>1],'i'=>100]);
+#      
+function arrToUpdate($mp) {	//  update users set st=2 where id=100 > arrToUpdate(['t'=>'loans','u'=>['st'=>1],'i'=>100]);
 	if (empty($mp['u']) || empty($mp['i']) || empty($mp['t'])) return false;
 	$t=$mp['t'];$u=$mp['u'];$i=$mp['i'];
 	if (!is_array($u)) return false;
@@ -243,7 +243,7 @@ function arrToUpdate($mp) {	// Обновить update users set st=2 where id=1
 	return true;
 }
 
-# Немного кода для всех
+#    
 $sbd=''; if (isset($db['sbd'])) $sbd=$db['sbd'].'.';	
 function aPgE($v,$tr=false){ 
 	aPg('error_msg',$v,$tr); 
@@ -258,10 +258,10 @@ function doIval($w,$p){
 }
 
 /**
-* Корректно добавляет элемент в массив.
-* Если массив не был определен -> создает пустой и добавляет ключ и значение
-* $a-> Массив куда добавляем он и вернется, $v=> Что добавляем, $k=> Ключ , если есть $a[$k], Если нет $a[].
-* Возвращает $a
+*     .
+*      ->       
+* $a->      , $v=>  , $k=>  ,   $a[$k],   $a[].
+*  $a
 */
 function addToArr($a,$c,$v,$k=null){
 	if (empty($a[$c])) $a[$c]=[];
@@ -276,7 +276,7 @@ function addToArr($a,$c,$v,$k=null){
 function aPg($k,$v,$tr=false) {
 	Global $page; 
 	if ($tr!=false ) {
-		$d=$v;	# В обычном режиме мы все ошибки переводим , кроме тех которым стоит запрет на это
+		$d=$v;	#        ,       
 	} else {
 		$d=l($v); 
 	}

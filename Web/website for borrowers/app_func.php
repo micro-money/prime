@@ -6,7 +6,7 @@ require_once($dr.'/tool/report_func.php');
 
 function acceptPost($mp){
 	
-	$pdata=[		# Все что мы ожидаем от клиента 
+	$pdata=[		#       
 		'email'=>['email'],
 		'birthdate'=>['day','month','year'],
 		'Gender'=>['Gender'],
@@ -26,32 +26,32 @@ function acceptPost($mp){
 	];
 
 	if (!isset($mp['rq'])) $rq=['l'=>[],'u'=>[],'c'=>[],'a'=>[]]; 
-	else $rq=$mp['rq']; 												# Заготовка под данные от клиента
+	else $rq=$mp['rq']; 												#     
 	
 	if (!isset($mp['pd'])) $pd=$_POST;
 	else $pd=$mp['pd'];
 	
 	$user=$mp['user']; 
 	
-	foreach ($pdata as $par=>$v) {	# Перебираем все ожидаемые post комбинации
+	foreach ($pdata as $par=>$v) {	#    post 
 		$tf=0; $tw=count($v); foreach ($v as $pk=>$pn) if (isset($pd[$pn])) $tf++;
 		if ($tf==$tw) {
 			#echo "[$par|$pn]";
 			$o=getPost(['rq'=>$rq,'par'=>$par,'pd'=>$pd]); $rq=$o['rq'];
-		}	# У нас все даные есть для текущего параметра
+		}	#        
 	}
 	
-		if (isset($_FILES) && count($_FILES)>0) $rq=getPost(['rq'=>$rq,'par'=>'files','pd'=>$pd]);	# У нас падают сканы
+		if (isset($_FILES) && count($_FILES)>0) $rq=getPost(['rq'=>$rq,'par'=>'files','pd'=>$pd]);	#    
 		
-		if (isset($rq['u']) && count($rq['u'])>0) {									# Вносим данные в таблицу users
+		if (isset($rq['u']) && count($rq['u'])>0) {									#     users
 			$upq=[]; foreach ($rq['u'] as $k=>$v) $upq[]=$k.'=\''.mysql_real_escape_string($v).'\'';	
 			db_request("UPDATE `users` SET " . implode(', ', $upq) . " WHERE `id` = {$user['id']}");
 		}
-		if (isset($rq['l']) && count($rq['l'])>0 && $user['a_lid']>0) {				# Вносим данные в таблицу leads
+		if (isset($rq['l']) && count($rq['l'])>0 && $user['a_lid']>0) {				#     leads
 			$upq=['udr=now()']; foreach ($rq['l'] as $k=>$v) $upq[]=$k.'=\''.mysql_real_escape_string($v).'\'';		
 			db_request("UPDATE `leads` SET " . implode(', ', $upq) . " WHERE `id` = {$user['a_lid']}");
 		}	
-		if (isset($rq['c']) && count($rq['c'])>0) {									# Вносим данные в таблицу users_contacts
+		if (isset($rq['c']) && count($rq['c'])>0) {									#     users_contacts
 			
 			foreach ($rq['c'] as $k=>$v) {
 				$upq=["uid={$user['id']}",'dv=now()']; foreach ($v as $fn=>$fv) $upq[]=$fn.'=\''.mysql_real_escape_string($fv).'\'';		
@@ -64,18 +64,18 @@ function acceptPost($mp){
 		}
 	
 	# 09972308868
-	if (isset($rq['a']) && count($rq['a'])>0) {									# Вносим данные в таблицу leads
+	if (isset($rq['a']) && count($rq['a'])>0) {									#     leads
 		$upq=[];
 		foreach ($rq['a'] as $k=>$v) {
 			if (strlen($v)>0) {
 				$dacc=onlyInList(array('o'=>'0123456789','s'=>$v));
 				if (strlen($dacc)>3) {	
-					$upq[]=$k.'=\''.mysql_real_escape_string($v).'\'';			# Оригинальный номер счет
-					if ($k=='bacc') $upq[]='dbacc=\''.$dacc.'\'';				# Поисковая часть счета
+					$upq[]=$k.'=\''.mysql_real_escape_string($v).'\'';			#   
+					if ($k=='bacc') $upq[]='dbacc=\''.$dacc.'\'';				#   
 				}
 			}
 		}
-		if (count($upq)>0) {	# Только не пустые
+		if (count($upq)>0) {	#   
 			$upq[]='uid='.$user['id']; $upq[]='dv=now()'; 
 			db_request("INSERT IGNORE INTO `users_accounts` SET ".implode(',',$upq));
 		}
@@ -86,16 +86,16 @@ function acceptPost($mp){
 function ah_uploadfile($mp){
 	/*
 	$mp=[
-	'n'=>$ah_fn,			// Номер - типа файла (1: MMid, 2: BankBook, 3: PayInvoce)
-	'nf'=>$ah_ff,			// Ключ файла в массиве $_FILES document.input.name (например photo1)	
+	'n'=>$ah_fn,			//  -   (1: MMid, 2: BankBook, 3: PayInvoce)
+	'nf'=>$ah_ff,			//     $_FILES document.input.name ( photo1)	
 	];
 	*/
 	
 	$fdirs=['/aupload/doc/','/aupload/app/','/aupload/app/','/aupload/pay/'];
 
-	$nfdo=$fdirs[$mp['n']].date("Ymd", time()).'/';			// Относительная Онлайн папка загружаемого файла [без имени вэбсервера]
+	$nfdo=$fdirs[$mp['n']].date("Ymd", time()).'/';			//      [  ]
 		
-	$nfdl=$_SERVER['DOCUMENT_ROOT'].$nfdo;					// Полная локальная папка загружаемого файла DR+Онлайн папка загружаемого файла
+	$nfdl=$_SERVER['DOCUMENT_ROOT'].$nfdo;					//      DR+   
 	if(!is_dir($nfdl)) mkdir($nfdl, 0777, true);
 	
 	Global $user;
@@ -103,10 +103,10 @@ function ah_uploadfile($mp){
 	$ah_fn=$mp['n']; $ah_ff=$mp['nf']; 
 	if (isset($_FILES[$ah_ff])){
 		if ($_FILES[$ah_ff]["error"] == 0 && substr($_FILES[$ah_ff]["type"], 0, 5) == 'image') {
-			#$ah_fext=end(explode(".", $_FILES[$ah_ff]["name"]));				// Расширение файла 
+			#$ah_fext=end(explode(".", $_FILES[$ah_ff]["name"]));				//   
 			$tmp = explode('.', $_FILES[$ah_ff]["name"]);	$ah_fext = end($tmp);
 			
-			// Вариант рандомного 8-ми значного тела для имени файла
+			//   8-     
 			$nfb = sprintf('%04x', rand(0, 65536)) . sprintf('%04x', rand(0, 65536)) ; 
 			// $nfb=''.date("Ymd_His", time());
 	
@@ -124,7 +124,7 @@ function ah_uploadfile($mp){
 			}		
 			
 		} else {
-			// попытка загрузить что то другое не image
+			//       image
 			//eh('(file1-no image)');
 		}
 	}	
@@ -133,7 +133,7 @@ function ah_uploadfile($mp){
 	
 function ss_chek_string($mp){
 	#Global $user;
-	$ah_ph=$mp['n']; $ah_pr=''.$mp['v'];	//Обязательно конвертить в стринг
+	$ah_ph=$mp['n']; $ah_pr=''.$mp['v'];	//   
 	$rq=false;	#$rq=[]; if (isset($mp['rq'])) $rq=$mp['rq'];
 	
 	$er_emp="<br>Field is required"; 
@@ -145,14 +145,14 @@ function ss_chek_string($mp){
 	$empty=0; if ($ah_pr=='') $empty=1;	
 	
 	if ($empty==1 && !isset($mp['nones'])) {
-		# Если поле пустое и отсутствует значек НЕ ТРЕБУЕТСЯ 
-		# Это поле нам необходимо -> У нас ошибка пустое поле которое необходимо
+		#         
+		#     ->       
 		aPgE($er_emp);
 		return $rq;
 	} else {
-		if ($empty==0) {								# Если у нас поле не пустое 
-			if (isset($b_reg)) {						# Если у нас есть обяхательное условие на рег выражение
-				if (!preg_match($b_reg, $ah_pr)) {		# Если не прошли проверку на рег выражение
+		if ($empty==0) {								#       
+			if (isset($b_reg)) {						#         
+				if (!preg_match($b_reg, $ah_pr)) {		#       
 					if (isset($er_req)) aPgE($er_req);
 					return $rq;
 				}
@@ -166,9 +166,9 @@ function ss_chek_string($mp){
 	return $rq;
 }
 
-function ss_chek_phone($mp){ // Обработка по типу телефон
+function ss_chek_phone($mp){ //    
 	#Global $user;
-	$ah_ph=$mp['n']; $ah_pr=''.$mp['v'];	//Обязательно конвертить в стринг
+	$ah_ph=$mp['n']; $ah_pr=''.$mp['v'];	//   
 	$rq=false; #$rq=[]; if (isset($mp['rq'])) $rq=$mp['rq'];
 	
 	$er_dub="<br>You have already used before this phone";  
@@ -184,21 +184,21 @@ function ss_chek_phone($mp){ // Обработка по типу телефон
 	$empty=0; if ($ah_pr=='') $empty=1;
 	
 	if ($empty==1 && !isset($mp['nones'])) {
-		# Если поле пустое и отсутствует значек НЕ ТРЕБУЕТСЯ 
-		# Это поле нам необходимо -> У нас ошибка пустое поле которое необходимо
+		#         
+		#     ->       
 		aPgE($er_emp);
 		return $rq;
 	} else {
 		if ($empty==0) {
-			# Если у нас поле не пустое 
+			#       
 			if (isset($b_reg)) {
 				if (!preg_match($b_reg, $ah_pr)) {
-					# Если не прошли проверку на рег выражение
+					#       
 					if (isset($er_req)) aPgE($er_req);
 					return $rq;
 				}				
 			}
-			# Поле не пустое и оно удовлетворяет рег выражению
+			#        
 			if (dublphone(['s'=>$mp['ds'],'n'=>$ah_ph,'v'=>$ah_pr])==0) {
 				#$ah_pf=mysql_real_escape_string($ah_pr);
 				#$rq[] = "`$ah_ph` = '$ah_pf'";
@@ -211,9 +211,9 @@ function ss_chek_phone($mp){ // Обработка по типу телефон
 	return $rq;
 }
 
-function dublphone($mp){	// Тест телефона на уже ранее введенный $mp=['n'=>'Имя ключ телефона:SecondPhone','v'=>'Номер телефона цифры:1234']
-	return 0;  # от 10.03.2017 по просьбе Антона на 10 дней отключаем проверку телефонов
-	if ($mp['v']=='') return 0;		// Если нет данных вылетаем
+function dublphone($mp){	//       $mp=['n'=>'  :SecondPhone','v'=>'  :1234']
+	return 0;  #  10.03.2017     10    
+	if ($mp['v']=='') return 0;		//    
 	
 	Global $user;
 	$phn=[]; $pha=[]; 
@@ -231,10 +231,10 @@ function dublphone($mp){	// Тест телефона на уже ранее в�
 	for ($x=0; $x<$ur+1; $x++) $phn[]=$phq[$x];
 	
 	
-	if ($mp['s']==10) $phn[]=$phq;		// Таблица все в одном
+	if ($mp['s']==10) $phn[]=$phq;		//    
 	
 	foreach ($phn as $k=>$v) if ($mp['n']!=$v && isset($user[$v])) $pha[]=$user[$v]; 
-	foreach ($phn as $k=>$v) if ($mp['n']!=$v && in_array($mp['v'],$pha)) return 1;		// Если такой телефон уже есть в рабочем массиве
+	foreach ($phn as $k=>$v) if ($mp['n']!=$v && in_array($mp['v'],$pha)) return 1;		//        
 	//print_r($pha); echo '['.$mp['v'].'|'.$mp['s'].']';
 	return 0;
 }
@@ -248,7 +248,7 @@ function getPost($mp){	#  $rq=getPost(['rq'=>$rq,'par'=>$par]); $_POST
 	
 	if ($par=='email') if (strlen($val)>4) $rq['c'][] = ['cr'=>0,'ct'=>2,'cname'=>'Email','cval'=>$val]; 
 	
-	if ($par=='birthdate') {			# День рождения pe
+	if ($par=='birthdate') {			#   pe
 		$day= intval($pd['day']); $month= intval($pd['month']); $year= intval($pd['year']);
 		$BirthDate = sprintf("%02d.%02d.%04d", $day, $month, $year);
 		if (empty($BirthDate)) aPgE("<br>BirthDay not specified!");
@@ -262,7 +262,7 @@ function getPost($mp){	#  $rq=getPost(['rq'=>$rq,'par'=>$par]); $_POST
 	
 	if ($par=='Gender') if (isset($libs['users.gender'][$val])) $rq['u']['gender'] = $val;	
 
-    if ($par=='SecondPhone') {			# Второй телефон  (НЕОБЯЗАТЕЛЕН)
+    if ($par=='SecondPhone') {			#    ()
 		$ss_mp=[	
 		'n'=>'SecondPhone','v'=>$val,
 		'ds'=>0,'nones'=>1,
@@ -273,22 +273,22 @@ function getPost($mp){	#  $rq=getPost(['rq'=>$rq,'par'=>$par]); $_POST
 		if ($cv) $rq['c'][] = ['cr'=>0,'ct'=>1,'cname'=>'Sec phone','cval'=>$cv];
 	}
 	
-    if ($par=='City') {					# Город
+    if ($par=='City') {					# 
 		$ss_mp=['n'=>'City','v'=>$val,'ee'=>"<br>City not specified!"];
 		$cv=ss_chek_string($ss_mp); if ($cv) $rq['u']['city'] = $cv;
 	}
 	
-	if ($par=='social') {				# Город
+	if ($par=='social') {				# 
 		if (isset($libs['users.social'][$val])) $rq['u']['social'] = $val;	
 	}
 
 	
-	if ($par=='cname') {				# Город
+	if ($par=='cname') {				# 
 		$ss_mp=['n'=>'cname','v'=>$val,'ee'=>"<br>Name of the Company not specified!"];	
 		$cv=ss_chek_string($ss_mp); if ($cv) $rq['u']['cname'] = $cv;	
 	}
 	
-	if ($par=='CompanyPhone') {			# Телефон Компании
+	if ($par=='CompanyPhone') {			#  
 		$ss_mp=[
 		'n'=>'cphone','v'=>$val,'ds'=>11,
 		'ed'=>"<br>You have already used before this Phone of the Company",
@@ -298,13 +298,13 @@ function getPost($mp){	#  $rq=getPost(['rq'=>$rq,'par'=>$par]); $_POST
 		$cv=ss_chek_phone($ss_mp); if ($cv) $rq['u']['cphone'] = $cv;	
 	}
 	
-	if ($par=='SalaryAmount') {			# Город
+	if ($par=='SalaryAmount') {			# 
 		$ss_mp=['n'=>'salary','v'=>$val,'ee'=>"<br>Not Set salary!"];
 		$cv=ss_chek_string($ss_mp); if ($cv && $cv>0) $rq['u']['salary'] = $cv;	
 	}
 	
-	if ($par=='Coworker') {		# Телефон коллеги (НЕОБЯЗАТЕЛЕН)
-		# Телефон коллеги (НЕОБЯЗАТЕЛЕН)
+	if ($par=='Coworker') {		#   ()
+		#   ()
 		$ss_mp=[
 		'n'=>'CoworkerPhone','v'=>$pd['CoworkerPhone'],'ds'=>12,'nones'=>1,
 		'ed'=>"<br>You have already used before this coworker phone.",
@@ -312,7 +312,7 @@ function getPost($mp){	#  $rq=getPost(['rq'=>$rq,'par'=>$par]); $_POST
 		];
 		$cwp=ss_chek_phone($ss_mp); 
 
-		# Имя коллеги (НЕОБЯЗАТЕЛЕН) 
+		#   () 
 		$ss_mp=['n'=>'CoworkerName','v'=>$pd['CoworkerName'],'nones'=>1,];
 		$cwn=ss_chek_string($ss_mp); 
 		
@@ -324,18 +324,18 @@ function getPost($mp){	#  $rq=getPost(['rq'=>$rq,'par'=>$par]); $_POST
 	if ($par=='Guarantor3') $rq=doGuarantor(['rq'=>$rq,'n'=>3,'nv'=>$pd['Guarantor3Name'],'pv'=>$pd['Guarantor3Phone']]);
 	if ($par=='Guarantor4') $rq=doGuarantor(['rq'=>$rq,'n'=>4,'nv'=>$pd['Guarantor4Name'],'pv'=>$pd['Guarantor4Phone']]);
 		
-	if ($par=='onrc') {						# Номер паспорта		
+	if ($par=='onrc') {						#  		
 		$ss_mp=['n'=>'origUsrMMPersonalID','v'=>$val,'ee'=>"<br>Missing passport information!"];
 		$cv=ss_chek_string($ss_mp); 
 		if ($cv) {
-			$rq['u']['onrc'] = $cv;			# У нас в итоговом запросе есть id паспорта > форматируем ее в трансли
-			$bw=getMmToEngFormatArray();	# Подготавливаем рабочий массив форматирования
-			$fd=FormatMmPersId(['bw'=>$bw,'mmid'=>$cv]);	# Форматируем  Паспотр, если скрипт сомневается тогда он верет Оригинал
+			$rq['u']['onrc'] = $cv;			#       id  >    
+			$bw=getMmToEngFormatArray();	#    
+			$fd=FormatMmPersId(['bw'=>$bw,'mmid'=>$cv]);	#   ,       
 			$rq['u']['fnrc'] = $fd['fin'];
 		}
 	}
 	
-	if ($par=='payment') {					# Каким образом клиент хочет получить деньги 
+	if ($par=='payment') {					#       
 		
 		#$how 	= intval($pd['how']);  
 		
@@ -374,7 +374,7 @@ function getPost($mp){	#  $rq=getPost(['rq'=>$rq,'par'=>$par]); $_POST
 					break;
 			}
 			
-			if (isset($oacc))	{		# Фиксиуем оригинальное и отформатированное название счета
+			if (isset($oacc))	{		#      
 				$rq['l']['oacc'] = $oacc;
 				$rq['l']['facc']=bankFormat(array('r'=>0,'s'=>$oacc));
 				$rq['a']['bacc']=$rq['l']['facc'];
@@ -382,14 +382,14 @@ function getPost($mp){	#  $rq=getPost(['rq'=>$rq,'par'=>$par]); $_POST
 		}	
 		*/
 	}
-	if ($par=='files') {					# Сканы от клиента pe
-		// [name] => Фото0025.jpg [type] => image/jpeg [tmp_name] => /tmp/phpI1VMQz [error] => 0 [size] => 903549
-		// Фото1
+	if ($par=='files') {					#    pe
+		// [name] => 0025.jpg [type] => image/jpeg [tmp_name] => /tmp/phpI1VMQz [error] => 0 [size] => 903549
+		// 1
 		$ah_fn=1; $ah_ff='photo1';
 		$ag_flid=ah_uploadfile(['n'=>$ah_fn,'nf'=>$ah_ff]);	
 		#if ($ag_flid>0) $rq[] = "`f$ah_fn` = $ag_flid";
 
-		// Фото2
+		// 2
 		$ah_fn=2; $ah_ff='photo2';
 		$ag_flid=ah_uploadfile(['n'=>$ah_fn,'nf'=>$ah_ff]);	
 		#if ($ag_flid>0) $rq[] = "`f$ah_fn` = $ag_flid";	 
@@ -400,10 +400,10 @@ function getPost($mp){	#  $rq=getPost(['rq'=>$rq,'par'=>$par]); $_POST
 function doGuarantor($mp){	# doGuarantor(['rq'=>$rq,'n'=>$n,'nv'=>$nv,'pv'=>$pv]);
 	$rq=$mp['rq']; $n=$mp['n']; $nv=$mp['nv']; $pv=$mp['pv'];
 	$dsm=[1=>21,2=>22,3=>23,4=>24];
-	# Поручитель Имя
+	#  
 	$ss_mp=['n'=>'Guarantor'.$n.'Name','v'=>$nv,'ee'=>"<br>Not Specified name of the person # $n"];
 	$gn=ss_chek_string($ss_mp);
-	# Поручитель Телефон
+	#  
 	$ss_mp=['n'=>'Guarantor'.$n.'Phone','v'=>$pv,'ds'=>$dsm[$n],
 	'ed'=>"<br>You have already used before this phone of the person # $n",
 	'ee'=>"<br>Not Specified phone of the person # $n Warranty",
@@ -486,15 +486,15 @@ function ah_initTime($mp) {
 JS;
 }
 
-# Webset старый =============================
+# Webset  =============================
 
-# Возвращает заголовок для приложения 
+#     
 function getMadheader(){
 	Global $user;
 	if (empty($user)) {
 		return "Mapl: 0";
 	} else {
-		# Проверяем есть ли дата от приложения для текущего клиента 
+		#          
 		$user['mad']=[];  $mad = db_array("SELECT id,dt,vol,`desc`,dv FROM `users_mapdata` WHERE `user_id` = {$user['id']}");
 		if (count($mad)>0) {
 			$user['mad']=$mad; return "TeslaX: ".$user['id'];
@@ -503,10 +503,10 @@ function getMadheader(){
 		}
 	}	
 }
-# Строка запроса на установку таймера 
+#      
 function setTimerSql($user){ return "UPDATE `leads` SET `stimer` = DATE_ADD(now(), interval 1435 MINUTE) WHERE `id` = {$user['a_lid']}"; }
 
-function getUserData($mp){	# Возвращает всю информацию по клиенту , либо с активной анкеты либо с указанно либо без нее.
+function getUserData($mp){	#      ,          .
 	Global $user;
 	
 	$uid=$mp['uid']; $lid=0; if (isset($mp['lid'])) $lid=$mp['lid'];
@@ -520,14 +520,14 @@ function getUserData($mp){	# Возвращает всю информацию п
 		$so=db_array("SELECT id,ft,fp,h FROM users_files WHERE uid=$uid and ft in (1,2) and ac!=4");
 		if (count($so)>0) foreach ($so as $k=>$v) $s[$v['ft']]=[$v];
 
-		if ($lid>0) {	# Если у нас есть лид к запросу
+		if ($lid>0) {	#       
 			$lm=db_array("SELECT id,uid,st,ramount,rdays,racc,how,bank,facc,oacc,cst,date_add(udr, interval 24 hour) stimer FROM `leads` WHERE id={$u['a_lid']}");  $l=$lm[0];	
 		}
 	}
 	return ['c'=>$c,'s'=>$s,'l'=>$l,'u'=>$u]; 
 }
 
-function checkUser($euid = false) {	# Тип анкеты для клиента
+function checkUser($euid = false) {	#    
 	Global $user; 
 	
 	if (!$euid) $us=$user; 		
@@ -541,102 +541,102 @@ function checkUser($euid = false) {	# Тип анкеты для клиента
 	$lim=[]; foreach ($aleads as $k=>$v) $lim[$v['id']]=$v; 
 	$lom=[]; foreach ($aloans as $k=>$v) $lom[$v['id']]=$v; 
 	
-	# Долги [2,3,4,5,6,7,8,16]
-	# ОК закрыта [19]
+	#  [2,3,4,5,6,7,8,16]
+	#   [19]
 	# pipe [20]
-	# проблемы [25,26,27,28,29]
+	#  [25,26,27,28,29]
 	$waits=[]; $opens=[]; $closes=[];
-	foreach ($lom as $k=>$v) {					# Форматируем сделки в асоц массив чтобы знать какие активные сделки есть за клиентом 
+	foreach ($lom as $k=>$v) {					#              
 		$lst=$v['st'];	
-		if ($lst==19) $closes[]=$v['id'];			# Если сделка погашена
-		if (in_array($lst,[2,3,4,5,6,7,8,16,25,26,27,28,29])) $opens[]=$v['id'];			# Если сделка в работе
-		if ($lst<2) $waits[]=$v['id'];				# Если сделка в ожидании
+		if ($lst==19) $closes[]=$v['id'];			#   
+		if (in_array($lst,[2,3,4,5,6,7,8,16,25,26,27,28,29])) $opens[]=$v['id'];			#    
+		if ($lst<2) $waits[]=$v['id'];				#    
 	}
 	
 	$wait=count($waits); $open=count($opens); $closed=count($closes);
 	#print_r($waits); echo "[here2 / $wait]";	
-	# Переписываем кол-во открытых и закрытых сделок их предрасчетных значений
+	#  -       
 	# $open=$us['a_od'];
 	# $closed=$us['a_cd'];
 
-	# По умолчанию первичную + старая анкета + сводка по сделкам
+	#    +   +   
 	$o=['h'=>'app_wizard','a'=>0,'o'=>$open,'w'=>$wait,'c'=>$closed,'ll'=>$aleads];	
-	if ($open>0) {											# ($open+$wait)>0 Если у клиента есть активная сделка(ки) > никаких новых заявок	
-		$o['h']="scan_wizard";								# Если у клиента есть не закрытая сделка(ки) > скан на оплату
+	if ($open>0) {											# ($open+$wait)>0      () >   	
+		$o['h']="scan_wizard";								#       () >   
 	} else {
 		
 		/*
-		Ситуация: 
-			У нас есть более одного займа в ожидании на клиента > Оставляем самый последний - остальные авто отказ с комментарием.
-			У нас есть активные сделки.
-				1. Если у нас есть займ в ожидании 
-					> берем номер его заявки и восстанавливаем users.a_lid все остальные заявки гасим.
-				2. Займа в ожидании нет.
-					> Гасим лищние активные сделки если они есть. Восстанавливаем users.a_lid если необходимо.
+		: 
+			          >    -     .
+			    .
+				1.        
+					>       users.a_lid    .
+				2.    .
+					>       .  users.a_lid  .
 		*/
 			
 		$us_up=[];
 			
-		if ($wait>0) {								# Если есть займы на рассмотрении
+		if ($wait>0) {								#     
 			
-			$fa_lid=$lom[$waits[0]]['lid']; 				# Если у нас есть займ на рассмотрении > у нас активная заявка должна быть только от него.
-			if ($wait>1) {									# У нас есть более одного займа на рассмотрении 	
-				# Оставляем самый последний - остальные авто отказ с комментарием.			
+			$fa_lid=$lom[$waits[0]]['lid']; 				#        >         .
+			if ($wait>1) {									#         	
+				#    -     .			
 				$lup=['st'=>18,'UsrNotes'=>'concat(UsrNotes, "\nAuto Deny: More than one active at a time")']; 
-				$park_lo=$waits; unset($park_lo[0]); # Исключаем первый займ > Он остается в ожидании		
-				foreach ($park_lo as $lo) fixLoans(['lup'=>$lup,'id'=>$lo]);	# Принудительно паркуем оставшиеся в ожидании сделки
+				$park_lo=$waits; unset($park_lo[0]); #    >    		
+				foreach ($park_lo as $lo) fixLoans(['lup'=>$lup,'id'=>$lo]);	#      
 			}
 		}
 		
-		if (count($aleads)>0) {								# Если есть активные заявки
+		if (count($aleads)>0) {								#    
 			
-			if (!isset($fa_lid)) $fa_lid=$aleads[0]['id'];	# Фактическая активная заявка (либо единственная если все ок, либо самая последняя - если ошибка)
+			if (!isset($fa_lid)) $fa_lid=$aleads[0]['id'];	#    (    ,    -  )
 			if (count($aleads)>1 || $fa_lid!=$aleads[0]['id']) {
-				# Если у клиента более одной активной заявки 
-				# Или основной активная заявка не равна первой активной заявке по списку.
-				# Надо принудительно закрыть все лишние кроме основной.
+				#        
+				#           .
+				#       .
 				db_request("update leads set st=27 where uid=$uid and st<25 and id!=$fa_lid");
 			}
 			
 		} else {
-			if (!isset($fa_lid)) $o['a']=1; 				# Если у клиента нет активной заявки > Создаем ее
+			if (!isset($fa_lid)) $o['a']=1; 				#       >  
 		}
 
-		# Если у нас есть номер активной заявки
-		# Если у клиента номер последней сделки не равен номеру активной заявки > надо этот номер восстановить
+		#       
+		#            >    
 		if (isset($fa_lid) && $us['a_lid']!=$fa_lid) $us_up['a_lid']=$fa_lid;
 		
-		# Если у нас есть что исправить в таблице users
+		#         users
 		if (count($us_up)>0) arrToUpdate(['t'=>'users','u'=>$us_up,'i'=>$uid]);
 			
-		if ($closed>0) $o['h']="vip_wizard"; 				# Вип анкета если у клиента до этого уже есть закрытые сделки 
+		if ($closed>0) $o['h']="vip_wizard"; 				#            
 	}
 	
-	if (!$euid) $user=$us;	# Глобально переписываем user если мы работаем с глобальным
+	if (!$euid) $user=$us;	#   user     
 	
 	return $o;
 }
 
-function stepm_wizard(){	# Расчет оставшихся шагов для первичной анкеты
+function stepm_wizard(){	#      
 	Global $lead,$user; $stepm=[];
-	$stepm=[]; 	# Проверяем обязательные параметры на наличие city
-	if (empty($user['birthdate']) ||  $user['gender']==2 ||  empty($user['city'])) $stepm[]=0;	# Если нет дня рождения или не указан пол
+	$stepm=[]; 	#      city
+	if (empty($user['birthdate']) ||  $user['gender']==2 ||  empty($user['city'])) $stepm[]=0;	#        
 	
-	# Если нет ЗП или данных по работе
+	#       
 	if (empty($user['salary']) || empty($user['cphone']) ||  empty($user['cname'])) $stepm[]=1;	
 	
-	# 5й шаг это обязательное требование установить приложение 
+	# 5       
 	if ($user['mad']==0 ) $stepm[]=5;	
 	
-	# Если нет телефонов у Поручителей 1 и 2
+	#      1  2
 	if ($user['mad']==0 && (!isset($lead['c']['1-1']) ||  !isset($lead['c']['2-1']))) $stepm[]=2;		
 	
-	# Если банковских реквизитов нет или номера паспорта $lead['l']['oacc'].
+	#        $lead['l']['oacc'].
 	if (
 		$lead['u']['onrc'].$lead['u']['fnrc']=='' || ($lead['l']['racc']==0 && $lead['l']['facc']=='') 
 		) $stepm[]=3;			
 	
-	# Если нет двух сканов
+	#    
 	#print_r($lead); die();
 	#if (count($lead['s'])!=2) $stepm[]=4;
 	if (!isset($lead['s'][2])) $stepm[]=4;

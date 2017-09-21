@@ -69,7 +69,7 @@
 				<li class="<?= ($self == '/a/profile/index.php') ? 'active' : '' ?>">
 					<a href="/a/profile/"><?= $user['login'] ?></a>
 				</li>
-				<li><a href="?act=quit" title="Выход"><i class="fa fa-sign-out"></i></a></li>
+				<li><a href="?act=quit" title=""><i class="fa fa-sign-out"></i></a></li>
 			</ul>
 
 			<?  } else { ?>

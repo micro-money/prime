@@ -38,20 +38,20 @@ $dpel['sin']=$tset; $dpel['sin']['fs']=$sin;
 
 $dpel['en']['fs']['wpurl']=['h'=>1];
 				
-$dpel['en']['fe']=['ival_sas_sqlm'];		# Снимаем титульное название таблицы $sas_sqlm['title']
+$dpel['en']['fe']=['ival_sas_sqlm'];		#     $sas_sqlm['title']
 	
 function ival_sas_sqlm($w) {
 	$w['sas_sqlm']["m"]=$w['data'][0];
 	return $w;
 }
 
-require_once($dr.'/tool/sas/stage1_settings.php');  				# Создаем динамические элементы (включая необходимые запросы в базу и прочая нагрузочная часть)
-if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				# Аякс работа если есть
-require_once($dr.'/tool/sas/stage2_build_elements.php');			# Выполняем запросы к базе данных и строим html у динамических элементов
+require_once($dr.'/tool/sas/stage1_settings.php');  				#    (        )
+if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				#    
+require_once($dr.'/tool/sas/stage2_build_elements.php');			#        html   
 
-# Снимаем  
+#   
 #print_r($sas_sqlm); die();  
-/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
+/* --------------------------  ------------ */ ob_start(); ?>
 	<div class="container">
 		<h2>Content for page: <a href="/<?= $sas_sqlm['m']['wpurl'] ?>" target="_blank"><?= $sas_sqlm['m']['wpten'] ?></a></h2>
 		<div class="row">

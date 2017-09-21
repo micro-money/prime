@@ -1,7 +1,7 @@
 <?php $backend_environment = TRUE;  #$ShowErr=TRUE; #$PlainText=true;
 require_once($_SERVER['DOCUMENT_ROOT'].'/config.php'); 
 if ((isset($_GET['act']) && $_GET['act']=='quit') || empty($user['id'])) {header("Location: /login?act=quit"); exit;}  
-/* ----------------------- ПАРАМЕТРЫ СТРАНИЦЫ ----------------------- */
+/* -----------------------   ----------------------- */
 
 $page['title'] = 'Profile Edit';
 resource([
@@ -15,9 +15,9 @@ if ($user['role'] == 'admin' && isset($_GET['id'])) $fid=$_GET['id'];
 
 $_GET['id']=$fid;
 
-// Настройки CRUD редактора на этой странице
+//  CRUD    
 $page['crud_editor'] = [
-    /*Склонение названия элемента редактирования*/
+    /*   */
     'header'=>'echo "Profile Edit";',
 	'bottom'=>'echo "";',
 	'messages' => [
@@ -32,12 +32,12 @@ $page['crud_editor'] = [
         'create_element' => 	'Create User',
         'new_element' => 		'New User'
     ],
-    /*Редактируемая таблица*/
+    /* */
     'table' => 'users',
-    /*Столбец с первичным ключом таблицы (по умолчанию - 'id')*/
+    /*     (  - 'id')*/
     'primary_key' => 'id',
 	// $passchange = $_POST['passchange']; $user_pass = $_POST['user_pass'];
-    /*Поля для редактирования и их настройки*/
+    /*     */
     'fields' => [
         'Name' => [
             'desc' => 'Name',
@@ -58,7 +58,7 @@ $page['crud_editor'] = [
 		],
     ],
 // 
-    /*Столбцы для вывода в таблицу и их настройки*/
+    /*       */
     'table_list_fields' => [
         'id' => ['desc' => '#id'],
         'Name' => ['desc' => 'Full Name'],
@@ -66,17 +66,17 @@ $page['crud_editor'] = [
         'create_at' => ['desc' => 'Create At'],
     ],
 	
-    /*Запрос списка элементов*/
+    /*  */
     'list_request' => 'SELECT * FROM `users` WHERE `id` = '.$fid,
 
-    /*Скрыть кнопки редактирования*/
+    /*  */
     'hide_edit' => false,
 
-    /*Сортировка по колонке №*/
+    /*   �*/
     'sort_column' => 1,
     'sort_order' => 'asc',
 
-    /*Количество на странице*/
+    /*  */
     'display_length' => 5,
 
 ];
@@ -102,15 +102,15 @@ if ( $user['role'] == 'admin' ) {
 }
 $page['crud_editor']['fields'][$setname]=$setvol;
 
-# Админ сам себя лишить прав не может
+#       
 if ($user['role'] == 'admin' && $fid==$user['id']) unset($page['crud_editor']['fields'][$setname]);
 
 // <input type="button|checkbox|file|hidden|image|password|radio|reset|submit|text">
-/* ---------------------- КОНТРОЛЛЕР СТРАНИЦЫ ----------------------- */
+/* ----------------------   ----------------------- */
 //die($log);
 require (PHIX_CORE . '/crud_editor/core.php');
 if (isset($_GET['toadmin']) && $user['role'] != 'admin') aPgE('You must give this link to admin for get access');
-/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
+/* --------------------------  ------------ */ ob_start(); ?>
 
 <h2><?= $page['title'] ?></h2>
 <hr />

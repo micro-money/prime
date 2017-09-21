@@ -1,5 +1,5 @@
 <?php require_once 'config.php';
-/* ----------------------- ПАРАМЕТРЫ СТРАНИЦЫ ----------------------- */
+/* -----------------------   ----------------------- */
 
 $page['js_raw'] = <<<JS
     window.gon={};
@@ -8,7 +8,7 @@ $page['js_raw'] = <<<JS
 JS;
 $page['template'] = 'sections/frontend/layout_content';
 
-/* ---------------------- КОНТРОЛЛЕР СТРАНИЦЫ ----------------------- */
+/* ----------------------   ----------------------- */
 
 $content = db_row("SELECT * FROM `web_pages` WHERE `slug` = 'faq'");
 $page['title'] = $content['title_' . $app['current_language']];
@@ -16,7 +16,7 @@ $page['title'] = $content['title_' . $app['current_language']];
 $pcon=$content['content_' . $app['current_language']];
 if ($page['title']=='') { $page['title'] = $content['title_en'];  $pcon=$content['content_en']; }
 
-/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start();
+/* --------------------------  ------------ */ ob_start();
 
 echo html_entity_decode($pcon);
 
