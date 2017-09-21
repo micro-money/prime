@@ -1,10 +1,10 @@
 console.log('movemoney_init');
 
-function movemoney(mode){		// обиаем пакет еквизитов для движения денег 
+function movemoney(mode){		
 	
 	var sm={},mm=[
-			['sofdate','samount','sopdate','soacc','snote'],	// ля отпавки
-			['cashman','rofdate','ramount','ropdate','roacc','rnote'],	// ля пиема денег
+			['sofdate','samount','sopdate','soacc','snote'],	
+			['cashman','rofdate','ramount','ropdate','roacc','rnote'],	
 		];
 	
 	for (r=0; r<mm[mode].length; r++) sm[mm[mode][r]] = $('#'+mm[mode][r]).val();
@@ -13,11 +13,11 @@ function movemoney(mode){		// обиаем пакет еквизитов для движения денег
 	lfon(0); $.ajax({ url: turl+bs+'cajx=movemoney&mode='+mode+'&rnd='+backRnd(),data:sm});
 }
 
-function recalc(){				// оманда на пееачет  обновлением таницы ,data:{}
+function recalc(){				
 	lfon(0); $.ajax({ url: turl+bs+'cajx=recalc&rnd='+backRnd()});
 }
 
-function changeStatus(mode){				// тказать в кедите  комментаием
+function changeStatus(mode){				
 	var sm={}; sm['dnote'] = $('#dnote').val();
 	lfon(0); $.ajax({ url: turl+bs+'cajx='+mode+'&rnd='+backRnd(),data:sm});
 }
