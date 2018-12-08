@@ -38,7 +38,7 @@
 				if ($contact->value === false) return false;
 			}
 			
-			// If it founds duplicate â attaches old contact to the new person
+			// If it founds duplicate â€“ attaches old contact to the new person
 			if (gettype($contact->name) !== 'string') {
 				$personNew = $contact->name;
 				$contact->name = null;
