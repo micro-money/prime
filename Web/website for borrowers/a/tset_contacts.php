@@ -1,13 +1,13 @@
 <?php
 
-$tset_contacts=['gf'=>'sastabV1',				#      
+$tset_contacts=['gf'=>'sastabV1',				# Базовые настройки для списка контактов 
 		'tl'=>	['users_contacts'=>[]],	
-		#   (qwery template)  as mdv   users u, uc.uid=u.id 
+		# Шаблон запроса (qwery template)  as mdv   users u, uc.uid=u.id 
 		'qt'=>"SELECT {(select)} FROM users_contacts uc WHERE 1=1 {(where)} {(group)} {(having)} {(order)} {(limit)}",
 		'qtl'=>[
 			'For user'=>'SELECT {(select)} FROM users_contacts uc WHERE uc.uid={(user_id)} {(where)} {(group)} {(having)} {(order)} {(limit)}',
 		],
-		#   (select fields)
+		# Поля выбора (select fields)
 		'dl'=>10,
 		'filter'=>[
 				'fw'=>['ucuid','uccval','ucdv'], 

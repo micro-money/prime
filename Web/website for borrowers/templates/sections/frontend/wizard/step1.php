@@ -9,7 +9,7 @@
                             <h2 class="step__title step__title-left padding-top-none">
 								<?= l($ss_tahead) ?>
 							</h2>
-                            <label class="control-label"><?= l('Please fill up the following fields. We need very detailed information to proceed your loan. We won�t contact any of your contacts unless we have to. Fields indicated with * are mandatory.') ?></label>
+                            <label class="control-label"><?= l('Please fill up the following fields. We need very detailed information to proceed your loan. We won’t contact any of your contacts unless we have to. Fields indicated with * are mandatory.') ?></label>
                         </div>
                     </div>
                     <form class="simple_form form-horizontal" role="form" id="form-step-01" autocomplete="off" novalidate="novalidate" action="<?= $this_wizard_name ?>" accept-charset="UTF-8" method="post">						
@@ -17,8 +17,8 @@
 						#$ccid=$countrym[$app['current_country']]['f'];
 						
 						$ss_eladd=' role="socialStatus" ';  						
-						$ss_cladd='';		//         
-						$ss_req=0; 			//  HTML  -    
+						$ss_cladd='';		// Дополнительная вставка в класс ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет
+						$ss_req=0; 			// Вывод HTML элемента - Обязательное поле  
 						
 						$ss_tabi=1;
 						
@@ -32,9 +32,9 @@
 						
 						if ($lead['u']['social']==0)  require(MC_ROOT . '/templates/sections/frontend/step_option.php');							
 
-						$ss_eladd='';   		//         						
-						$ss_cladd='required ';	//         
-						$ss_req=1; 				//  HTML  -    
+						$ss_eladd='';   		// Дополнительная вставка в элемент ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет						
+						$ss_cladd='required ';	// Дополнительная вставка в класс ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет
+						$ss_req=1; 				// Вывод HTML элемента - Обязательное поле  
 						
 						$ss_lname='Company Name';
 						$ss_phold='Micromoney';

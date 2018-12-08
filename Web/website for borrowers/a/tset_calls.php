@@ -1,10 +1,10 @@
 <?php
 
-$t=['gf'=>'sastabV1',				# :    
+$t=['gf'=>'sastabV1',				# ОБЯЗ: Имя функции конструктора элемента
 		'tl'=>	['users_calls'=>[],],
-		#   (qwery template)  as mdv
+		# Шаблон запроса (qwery template)  as mdv
 		'qt'=>"SELECT {(select)} FROM users_calls uk WHERE 1=1 {(where)} {(group)} {(having)} {(order)} {(limit)}",
-		#   (select fields)
+		# Поля выбора (select fields)
 		'qtl'=>[
 			'For user'=>'SELECT {(select)} FROM users_calls uk WHERE uk.uid={(user_id)} {(where)} {(group)} {(having)} {(order)} {(limit)}',
 		],
@@ -39,15 +39,15 @@ $t=['gf'=>'sastabV1',				# :
 	];
 
 /*
-if (isset($id)) {	#   id 
+if (isset($id)) {	# Если есть id клиета
 	$on='For the current customer'; $t['setl'][$on]=['(w|n)'=>'ukuid|'.$id.'|0'];
 }
 
-if (isset($lid)) {	#     
+if (isset($lid)) {	# Если есть номер лида 
 	$on='For the current lead'; $t['setl'][$on]=['(w|n)'=>'ukdt|ukdid','(w|v)'=>'1|'.$lid,'(w|s)'=>'0|0'];
 }
 
-if (isset($did)) {	#     
+if (isset($did)) {	# Если есть номер сделки 
 	$on='For current Loan'; $t['setl'][$on]=['(w|n)'=>'ukdt|ukdid','(w|v)'=>'2|'.$did,'(w|s)'=>'0|0'];
 }
 

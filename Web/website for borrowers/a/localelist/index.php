@@ -6,20 +6,20 @@ require_once($dr.'/a/access.php');
 $page['title'] = 'Locales';
 $page['desc'] = 'Locale translations list';
 
-$vlim=['etd'=>' if (strlen($tdv)>60) $tdf=substr($tdv, 0, 60)." ...";'];	#    10 
+$vlim=['etd'=>' if (strlen($tdv)>60) $tdf=substr($tdv, 0, 60)." ...";'];	# Обрезка значения до 10 символов
 
-#       
-$dpel=[							# : :   -        
-	'mt'=>['gf'=>'sastabV1',				# :    
+# Мы расписываем какие элементы будут на странице
+$dpel=[							# ОБЯЗ: ГЛОБАЛЬНЫЙ: Базовые установки - минимально даже с ними уже может строиться 
+	'mt'=>['gf'=>'sastabV1',				# ОБЯЗ: Имя функции конструктора элемента
 		'tl'=>	[	
 					'web_words'=>[
-						#        (      )
+						# Тут можно добавить или переопределить старые настройки (затереть старые можно только переопределив их новыми)
 						'c'=>[
 							'action'=>['fn'=>'Actions','p'=>'action','q'=>'(select 1)'],
 						]
 					],
 				],
-		#   (qwery template)  as mdv
+		# Шаблон запроса (qwery template)  as mdv
 		'qt'=>"SELECT {(select)} FROM web_words ww WHERE 1=1 {(where)} {(group)} {(having)} {(order)} {(limit)}",
 		'dl'=>10,
 		'setl'=>[
@@ -42,11 +42,11 @@ $dpel=[							# : :   -
 	],
 ];
 
-require_once($dr.'/tool/sas/stage1_settings.php');  				#    (        )
-if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				#    
-require_once($dr.'/tool/sas/stage2_build_elements.php');			#        html   
+require_once($dr.'/tool/sas/stage1_settings.php');  				# Создаем динамические элементы (включая необходимые запросы в базу и прочая нагрузочная часть)
+if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				# Аякс работа если есть
+require_once($dr.'/tool/sas/stage2_build_elements.php');			# Выполняем запросы к базе данных и строим html у динамических элементов
 
-/* --------------------------  ------------ */ ob_start(); ?>
+/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
 	<div class="container">
 		<h2>Locale translations</h2>
 		<?= $html['mt'] ?>

@@ -9,15 +9,15 @@
                             <h2 class="step__title step__title-left padding-top-none">
                             <?= l($ss_tahead) ?>
 							</h2>							
-<!-- Please fill up the following fields. This is the most important step as we�ll transact the money to you from this information. Please choose carefully and take clear photos. -->
+<!-- Please fill up the following fields. This is the most important step as we’ll transact the money to you from this information. Please choose carefully and take clear photos. -->
 							<label class="control-label"><?= l('ALMOST DONE! Please choose the bank and write your bank account number. If you not yet have bank account , you can continue this application later! Hurry to take your money!') ?></label>
                         </div>
                     </div>
                     <form class="simple_form form-horizontal" role="form" id="form-step-01" autocomplete="off" novalidate="novalidate" action="<?= $this_wizard_name ?>" accept-charset="UTF-8" method="post" enctype="multipart/form-data">
 						<?												
 							$ss_eladd=' aria-invalid="false" role="moneyChoose" data-placeholder="false" ';  						
-							$ss_cladd='';		//         
-							$ss_req=0; 			//  HTML  -    
+							$ss_cladd='';		// Дополнительная вставка в класс ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет
+							$ss_req=0; 			// Вывод HTML элемента - Обязательное поле  
 							
 							$ss_tabi=1;
 							
@@ -53,9 +53,9 @@
 							
 							require(MC_ROOT . '/templates/sections/frontend/step_option.php'); 
 
-							//   
+							// Номер счета 
 							
-							$ss_eladd='  ';  // disabled="disabled"         											
+							$ss_eladd='  ';  // disabled="disabled" Дополнительная вставка в элемент ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет											
 							$ss_tabi=3;
 							
 							$ss_lname='Fill your bank account number here';
@@ -91,9 +91,9 @@
 
 							echo '</div>';
 							
-						$ss_eladd='';   		//         						
-						$ss_cladd='required ';	//         
-						$ss_req=1; 				//  HTML  -    
+						$ss_eladd='';   		// Дополнительная вставка в элемент ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет						
+						$ss_cladd='required ';	// Дополнительная вставка в класс ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет
+						$ss_req=1; 				// Вывод HTML элемента - Обязательное поле  
 						
 						$ss_lname='NRC Number';
 						#$ss_phold='12/ThaKaKa(N)000000';

@@ -11,7 +11,7 @@ class Exception extends \Exception
 {
 }
 
-//todo: 
+//todo: удалить
 $db['host'] = 'localhost';
 $db['username'] = 'root';
 $db['password'] = '';
@@ -19,7 +19,7 @@ $db['base'] = 'nalog';
 require_once('f_mysql.php');
 
 
-// 
+//фильтрация данных
 class Esc
 {
 
@@ -51,7 +51,7 @@ class Esc
     }
 }
 
-//
+//сущность
 class Entity
 {
     private
@@ -72,7 +72,7 @@ class Entity
         $this->_setFields();
     }
 
-    //    
+    //указываем типы данных для фильтрации
     protected function _setTypes()
     {
         $this->_types['id'] = 'int';
@@ -82,9 +82,9 @@ class Entity
         $this->_types['deleted_at'] = 'timestamp';
     }
 
-    //   ;
-    //      
-    //     ,  $all=true
+    //загрузить запись в объект;
+    //по умолчанию грузятся только не удаленные записи
+    //если надо в том числе удаленные, то $all=true
     public function get($id, $all = false)
     {
         $result = db_row("SELECT * FROM `$this->_table` WHERE `id`=" . esc::sql($id, 'int') .
@@ -94,8 +94,8 @@ class Entity
         return false;
     }
 
-    //   ,    id , ,  
-    //$types -    
+    //сохраняем запись в бд, если записи с id нет, создаётся, иначе редактируется
+    //$types - типы данных для фильтрации
     public function save($types = null)
     {
         if (is_array($types)) {
@@ -137,7 +137,7 @@ class Entity
         return $this->get($result);
     }
 
-    //""  
+    //"мягко" удаляем запись
     public function remove()
     {
         if ($this->deleted_at == '0000-00-00 00:00:00') {
@@ -147,7 +147,7 @@ class Entity
         return $this;
     }
 
-    // 
+    //восстанавливаем запись
     public function restore()
     {
         if ($this->deleted_at != '0000-00-00 00:00:00') {
@@ -162,7 +162,7 @@ class Entity
         return $this->deleted_at=='0000-00-00 00:00:00';
     }
 
-    //  
+    //полное удаление записи
     public function delete()
     {
         db_request("DELETE FROM `$this->_table` WHERE `id`=" . Esc::sql($this->id, $this->_types['id']) . chr(10));
@@ -170,7 +170,7 @@ class Entity
         return true;
     }
 
-    //   
+    //заполняем объект из массива
     public function setFieldsFromArray($data)
     {
         $fields = $this->__toArray();
@@ -216,7 +216,7 @@ class Entity
         return json_encode($this->__toArray());
     }
 
-    //  ,   
+    //определяем свойства класса, являющиеся полями сущности
     protected function _setFields($field = null)
     {
         if (!$this->_fields) {
@@ -232,7 +232,7 @@ class Entity
     }
 }
 
-// 
+//Список сущностей
 class EntityList
 {
     protected
@@ -245,15 +245,15 @@ class EntityList
         $this->_setTypes();
     }
 
-    //  
+    //выбрать все записи
     public function all($sort = 'DESC', $all = false)
     {
         return $this->search([], [], $sort, $all);
     }
 
-    // ,  
-    //$conditions -      ($this->_builder)
-    //$navigation -      ['start'=>'. ', 'limit'=>'- ']
+    //выбрать записи, удовлетворяющие условиям
+    //$conditions - массив условий в формате билдера ($this->_builder)
+    //$navigation - массив для ограничения по количеству ['start'=>'нач. значение', 'limit'=>'кол-во записей']
     public function search($conditions=[], $navigation=[], $sort = 'DESC', $all = false)
     {
         if (!$all)
@@ -277,7 +277,7 @@ class EntityList
         return $this->_list;
     }
 
-    // ,  
+    //подсчитать записи, удовлетворяющие условиям
     public function count($conditions, $all = false)
     {
         if (!$all)
@@ -286,7 +286,7 @@ class EntityList
         return db_result("SELECT COUNT(*) FROM `$this->_table`" . (strlen($conditions) ? " WHERE $conditions" : ''));
     }
 
-//    
+//указываем типы данных для фильтрации
     protected function _setTypes()
     {
         $this->_types['id'] = 'int';
@@ -296,15 +296,15 @@ class EntityList
         $this->_types['deleted_at'] = 'timestamp';
     }
 
-    // 
-    //       ,  ['!field'='value']
-    // >, < : ,  ( int, float, bool, timestamp)
-    // >=, <= :   ,    ( int, float, bool, timestamp)
-    // !, = :  ,  ( ,  array)
-    // % = LIKE ( string)
-    // * = IN ( ,  array)
+    //конструктор запросов
+    // для условия задаём оператор перед именем поля, например ['!field'='value']
+    // >, < : больше, меньше (для int, float, bool, timestamp)
+    // >=, <= : больше или равно, меньше или раньше (для int, float, bool, timestamp)
+    // !, = : не равно, равно (для всех, кроме array)
+    // % = LIKE (для string)
+    // * = IN (для всех, кроме array)
     //
-    //todo:     array
+    //todo: сделать поиск по типу array
     private function _builder($conditions)
     {
         $result = [];
@@ -416,7 +416,7 @@ class EntityList
 
 }
 
-//
+//файл
 class File extends Entity
 {
     private
@@ -557,7 +557,7 @@ class File extends Entity
 }
 
 
-// 
+//Версия файла
 class RepositoryFile extends Entity
 {
     private
@@ -586,7 +586,7 @@ class RepositoryFile extends Entity
         $this->_types['file_id'] = 'int';
     }
 
-    //greed - "",       
+    //greed - "жадность", вместе с версией сразу грузим прикреплённый файл
     public function get($id, $all = false, $greed = false)
     {
         $result = parent::get($id, $all);
@@ -615,7 +615,7 @@ class RepositoryFile extends Entity
         return null;
     }
 
-    // 
+    //прикрепляем файл
     public function setFile($file = 0)
     {
         if (!is_object($file)) {
@@ -646,7 +646,7 @@ class RepositoryFile extends Entity
         return true;
     }
 
-    // 
+    //прикрепляем Репозиторий
     public function setRepository($repository = 0)
     {
         if (!is_object($repository)) {
@@ -715,11 +715,11 @@ class RepositoryFile extends Entity
 
 }
 
-// (      ( ))
-//todo:    ,     
-//todo:    ,     (    )
-//todo: :   ()    
-//todo:    ,  
+//Репозиторий (сущность для хранения множества версий объекта (например файлы))
+//todo: нужно написать листинг версий, создание файла с учетом версии
+//todo: написать еще два класса, один для листинга файлов (на случай работы вне репозитория)
+//todo: второй: листинг репозиториев (версий) для навигации по хранилищу
+//todo: еще раз продумать архитектуру, продумать хранение
 class Repository extends Entity
 {
     private
@@ -743,7 +743,7 @@ class Repository extends Entity
             $this->get($id);
     }
 
-    //greed - "",       
+    //greed - "жадность", вместе с репозиторием сразу грузим имеющиеся версии
     public function get($id, $all = false, $greed = false)
     {
         parent::get($id, $all);
@@ -768,7 +768,7 @@ class Repository extends Entity
         $this->_types['data'] = 'array';
     }
 
-    //    
+    //добавляем версию файла в репозиторий
     public function addFile($file)
     {
         if (!$this->_last_id || $this->id == !$this->_last_id) {
@@ -800,7 +800,7 @@ class Repository extends Entity
         return true;
     }
 
-    //   
+    //возвращает актуальную версию файла
     public function getFile()
     {
         $data = db_row("SELECT * FROM `repository_files` WHERE `repository_id`=" . Esc::sql($this->id, $this->types['id']) . " ORDER by `created_at` DESC LIMIT 0, 1");
@@ -811,8 +811,8 @@ class Repository extends Entity
         return $file;
     }
 
-    //   
-    //$refresh = true:    
+    //список объектов версий файлов
+    //$refresh = true: принудительно дёргаем из БД
     public function getFiles($refresh = false, $sort = 'DESC')
     {
         if (!$refresh && $this->_list)
@@ -857,7 +857,7 @@ class Repository extends Entity
 
 }
 
-// 
+//коллекция репозитариев
 class Repositories extends EntityList
 {
     private
@@ -906,7 +906,7 @@ class Repositories extends EntityList
 
 }
 
-// 
+//коллекция файлов
 class Files extends EntityList
 {
     private

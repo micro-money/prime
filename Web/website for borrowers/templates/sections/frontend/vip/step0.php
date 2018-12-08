@@ -19,7 +19,7 @@
 						<? 		
 						/*
 
-Dear Phyu Sin Thant! Take now your money - (    ) 50.000mmk!
+Dear Phyu Sin Thant! Take now your money - (сколько чел выбрал в градуснике) 50.000mmk!
 You are our trusted customer! 
 That means you can get loan in only 2 minutes! 
 
@@ -30,9 +30,9 @@ It a pleasure to work with you!
 						*/
 						
 						
-						$ss_eladd='';   		//         						
-						$ss_cladd='required ';	//       
-						$ss_req=1; 				//  HTML  -  
+						$ss_eladd='';   		// Дополнительная вставка в элемент ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет						
+						$ss_cladd='required ';	// Дополнительная вставка в класс   
+						$ss_req=1; 				// Вывод HTML элемента - Обязательное поле
 						
 						$ss_lname='Emergency person name 1';
 						$ss_phold=l($ss_lname);

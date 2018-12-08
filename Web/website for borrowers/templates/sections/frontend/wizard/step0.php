@@ -14,9 +14,9 @@
  						
 						<?
 						
-						$ss_eladd='';   //         
-						$ss_cladd='';	//         
-						$ss_req=0; 		//  HTML  -  
+						$ss_eladd='';   // Дополнительная вставка в элемент ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет
+						$ss_cladd='';	// Дополнительная вставка в класс ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет
+						$ss_req=0; 		// Вывод HTML элемента - Обязательное поле
 						
 						if (!isset($lead['c']['0-2'])) {
 							$ss_lname='Your email';  // Email
@@ -51,8 +51,8 @@
 						
 						#print_r($stepm);  die('['.$tmpl.']');	
 						$ss_eladd='';  						
-						$ss_cladd='required ';	//         
-						$ss_req=1; 			//  HTML  -    
+						$ss_cladd='required ';	// Дополнительная вставка в класс ОБЯЗАТЕЛЬНА БЫТЬ пустая или нет
+						$ss_req=1; 			// Вывод HTML элемента - Обязательное поле  
 						
 						$ss_tabi=7;
 						
@@ -75,7 +75,7 @@
 						$ss_rname=$ss_fname.'_id'; 
 						$ss_fval=''; if (isset($lead['c']['0-4'])) $ss_fval=$lead['c']['0-1'][0]['cval'];	# && count($lead['c']['0-4'])>1
 						$ss_tabi=9;
-						$ss_req=0; $ss_cladd='';   //  
+						$ss_req=0; $ss_cladd='';   // Не требуется
 						if (!isset($lead['c']['0-4'])) require(MC_ROOT . '/templates/sections/frontend/step_phone.php');
 						
 						require(MC_ROOT . '/templates/sections/frontend/step_nextbutton.php'); 

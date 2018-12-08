@@ -5,19 +5,19 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/config.php');
 require_once($dr.'/a/access.php');
 $page['title'] = 'Customers list'; $page['desc'] = 'Customers list (users exclude admins)';
 
-#       
-$dpel=[							# : :   -        
-	'md'=>['gf'=>'sastabV1',				# :    
+# Мы расписываем какие элементы будут на странице
+$dpel=[							# ОБЯЗ: ГЛОБАЛЬНЫЙ: Базовые установки - минимально даже с ними уже может строиться 
+	'md'=>['gf'=>'sastabV1',				# ОБЯЗ: Имя функции конструктора элемента
 		'tl'=>	[	
 					'users'=>[
-						#        (      )
+						# Тут можно добавить или переопределить старые настройки (затереть старые можно только переопределив их новыми)
 						'c'=>['act'=>['fn'=>'Actions','p'=>'action','q'=>'(select 1)'],]
 					],
 				],
-		# te ->  eval , fe ->  
+		# te -> верхний eval , fe -> нижний евал
 		'qt'=>"SELECT {(select)} FROM users u WHERE u.role='' {(where)} {(group)} {(having)} {(order)} {(limit)}",
 		
-		#   (select fields)
+		# Поля выбора (select fields)
 		'dl'=>10,
 		'setl'=>[
 			'For Last Mounth'	=>['(w|n)'=>'udv|wt1|2','(wt|wt1)'=>'day|-30'],
@@ -42,18 +42,18 @@ $dpel=[							# : :   -
 ];
 
 
-$page['js'][] = $hn.$selfc.'m.js?ver='.$jsver;						#   js
+$page['js'][] = $hn.$selfc.'m.js?ver='.$jsver;						# Подключаем персональный js
 
-require_once($dr.'/tool/sas/stage1_settings.php');  				#    (        )
+require_once($dr.'/tool/sas/stage1_settings.php');  				# Создаем динамические элементы (включая необходимые запросы в базу и прочая нагрузочная часть)
 
-require_once('cajx.php');											#    
+require_once('cajx.php');											# Подключаем кастомную обработку аякса
 
-if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');		#    
-require_once($dr.'/tool/sas/stage2_build_elements.php');			#        html   
+if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');		# Аякс работа если есть
+require_once($dr.'/tool/sas/stage2_build_elements.php');			# Выполняем запросы к базе данных и строим html у динамических элементов
 $cstl='style="padding: 5px;margin-bottom: 5px;margin-right: 7px;"';
 
 $el='md';
-/* --------------------------  ------------ */ ob_start(); ?>
+/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
 	<div class="container-fluid" style="margin-top: -20px;">
 
 		<div class="form-inline">  

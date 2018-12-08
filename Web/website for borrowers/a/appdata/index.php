@@ -9,12 +9,12 @@ $page['desc'] = 'Customer information from application';
 if (isset($_GET['uid']) && intval($_GET['uid'])>0) $uid=intval($_GET['uid']);
 
 
-#       
-$dpel=[							# : :   -        
-	'md'=>['gf'=>'sastabV1',				# :    
+# Мы расписываем какие элементы будут на странице
+$dpel=[							# ОБЯЗ: ГЛОБАЛЬНЫЙ: Базовые установки - минимально даже с ними уже может строиться 
+	'md'=>['gf'=>'sastabV1',				# ОБЯЗ: Имя функции конструктора элемента
 		'tl'=>	[	
 					'users'=>[
-						#        (      )
+						# Тут можно добавить или переопределить старые настройки (затереть старые можно только переопределив их новыми)
 					],
 					'users_map'=>[
 						'pt'=>'m',
@@ -27,9 +27,9 @@ $dpel=[							# : :   -
 							],
 					]
 				],
-		#   (qwery template)  as mdv
+		# Шаблон запроса (qwery template)  as mdv
 		'qt'=>"SELECT {(select)} FROM users as u,users_map as m WHERE m.user_id=u.id {(where)} {(group)} {(having)} {(order)} {(limit)}",
-		#   (select fields)
+		# Поля выбора (select fields)
 		'dl'=>10,
 		/**/
 		'setl'=>[
@@ -84,11 +84,11 @@ function rep($tdv){
 	return $udata;
 }
 
-require_once($dr.'/tool/sas/stage1_settings.php');  				#    (        )
-if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				#    
-require_once($dr.'/tool/sas/stage2_build_elements.php');			#        html   
+require_once($dr.'/tool/sas/stage1_settings.php');  				# Создаем динамические элементы (включая необходимые запросы в базу и прочая нагрузочная часть)
+if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				# Аякс работа если есть
+require_once($dr.'/tool/sas/stage2_build_elements.php');			# Выполняем запросы к базе данных и строим html у динамических элементов
 
-/* --------------------------  ------------ */ ob_start(); ?>
+/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
 
 <h2>Information from Application</h2>
 <?= $html['md'] ?>

@@ -26,13 +26,13 @@ $ss_banklista=[
 		case 1:														# social,salary,work data,coworker data
 			$rq=step1($rq);
 			break;
-		case 2:														#  
+		case 2:														# Дополнительные контакты
 			$rq=step2($rq);											
 			break;
-		case 3:														#  
+		case 3:														# Банковские реквизиты
 			$rq=step3($rq);			
 			break;
-		case 4:														#    
+		case 4:														# Сканы паспорта и банка
 			$rq=step4($rq);
 			break;
 		default: header("Location: /"); exit;
@@ -48,7 +48,7 @@ function ss_chek_bank($rq){
 	$payment_system = $_POST['payment_system'];
 	$bank = intval($_POST['bank']);
 	
-    #       
+    # Каким образом клиент хочет получить деньги 
 	
 	if (isset($libs['loans.how'][$how])) {
 		$rq['l']['how'] = $how;
@@ -86,7 +86,7 @@ function ss_chek_bank($rq){
 				break;
 		}
 		
-		if (isset($oacc))	{		#      
+		if (isset($oacc))	{		# Фиксиуем оригинальное и отформатированное название счета
 			$rq['l']['oacc'] = $oacc;
 			$rq['l']['facc']=bankFormat(array('r'=>0,'s'=>$oacc));
 		}
@@ -96,18 +96,18 @@ function ss_chek_bank($rq){
 
 function step3($rq) {
 	
-	$rq=ss_chek_bank($rq);				#  
+	$rq=ss_chek_bank($rq);				# Банковские реквизиты
 	
-	$enrc = $_POST['onrc'];				#  
+	$enrc = $_POST['onrc'];				# Номер паспорта
 	
 	$ss_mp=['n'=>'origUsrMMPersonalID','v'=>$enrc,'ee'=>"<br>Missing passport information!"];
 	$cv=ss_chek_string($ss_mp); 
 	if ($cv) {
-		$rq['u']['onrc'] = $cv;			#       id  >    
+		$rq['u']['onrc'] = $cv;			# У нас в итоговом запросе есть id паспорта > форматируем ее в транслит
 		
-		$bw=getMmToEngFormatArray();	#    
+		$bw=getMmToEngFormatArray();	# Подготавливаем рабочий массив форматирования
 
-		$fd=FormatMmPersId(['bw'=>$bw,'mmid'=>$enrc]);	#   ,       
+		$fd=FormatMmPersId(['bw'=>$bw,'mmid'=>$enrc]);	# Форматируем  Паспотр, если скрипт сомневается тогда он верет Оригинал
 		$rq['u']['fnrc'] = $fd['fin'];
 	}
 
@@ -122,24 +122,24 @@ function step2($rq) {
 	$Guarantor2Phone = $_POST['Guarantor2Phone'];
 	$Guarantor2Name = $_POST['Guarantor2Name'];
 	
-    #   
+    # Первый поручитель Имя
 	$ss_mp=['n'=>'Guarantor1Name','v'=>$Guarantor1Name,
 	'ee'=>"<br>Not Specified name of the person # 1"];
 	$g1n=ss_chek_string($ss_mp); 
 
-    #   
+    # Второй поручитель Имя
 	$ss_mp=['n'=>'Guarantor2Name','v'=>$Guarantor2Name,
 	'ee'=>"<br>Not Specified name of the person # 2"];
 	$g2n=ss_chek_string($ss_mp); 
 	
-	#   
+	# Первый поручитель Телефон
 	$ss_mp=['n'=>'Guarantor1Phone','v'=>$Guarantor1Phone,'ds'=>21,
 	'ed'=>"<br>You have already used before this phone of the person # 1",
 	'ee'=>"<br>Not Specified phone of the person # 1 Warranty",
 	'er'=>"<br>Error in the room phone warranty person # 1! You must enter 7-11 digits without spaces."];
 	$g1p=ss_chek_phone($ss_mp); 
 	
-	#   
+	# Второй поручитель Телефон
  	$ss_mp=['n'=>'Guarantor2Phone','v'=>$Guarantor2Phone,'ds'=>22,
 	'ed'=>"<br>You have already used before this phone of the person # 2",
 	'ee'=>"<br>Not Specified phone of the person # 2 Warranty",
@@ -163,14 +163,14 @@ function step1($rq) {
 	$CoworkerPhone = $_POST['CoworkerPhone'];
 	$CoworkerName = $_POST['CoworkerName'];
  
-    #   ()
+    # Соц статус (НЕОБЯЗАТЕЛЕН)
 	if (isset($libs['users.social'][$social])) $rq['u']['social'] = $social;
 	
-    #  
+    # Имя Компании
 	$ss_mp=['n'=>'cname','v'=>$cname,'ee'=>"<br>Name of the Company not specified!"];	
 	$cv=ss_chek_string($ss_mp); if ($cv) $rq['u']['cname'] = $cv;
 	
-	#  
+	# Телефон Компании
 	$ss_mp=[
 	'n'=>'cphone','v'=>$cphone,'ds'=>11,
 	'ed'=>"<br>You have already used before this Phone of the Company",
@@ -179,11 +179,11 @@ function step1($rq) {
 	];
 	$cv=ss_chek_phone($ss_mp); if ($cv) $rq['u']['cphone'] = $cv;
 		
-    # 
+    # Доход
 	$ss_mp=['n'=>'salary','v'=>$salary,'ee'=>"<br>Not Set salary!"];
 	$cv=ss_chek_string($ss_mp); if ($cv && $cv>0) $rq['u']['salary'] = $cv;
 	
-	#   ()
+	# Телефон коллеги (НЕОБЯЗАТЕЛЕН)
 	$ss_mp=[
 	'n'=>'CoworkerPhone','v'=>$CoworkerPhone,'ds'=>12,'nones'=>1,
 	'ed'=>"<br>You have already used before this coworker phone.",
@@ -192,7 +192,7 @@ function step1($rq) {
 	$cwp=ss_chek_phone($ss_mp); 
 	
 
-    #   () 
+    # Имя коллеги (НЕОБЯЗАТЕЛЕН) 
 	$ss_mp=['n'=>'CoworkerName','v'=>$CoworkerName,'nones'=>1,];
 	$cwn=ss_chek_string($ss_mp); 
 	
@@ -214,7 +214,7 @@ function step0($rq){
 	//$township = $_POST['township'];
 
     /*
-	#   ()
+	# Почта  (НЕОБЯЗАТЕЛЕН)
     $email = str_replace(' ', '', $email);  
 	$ss_mp=[
 	'n'=>'email','v'=>$email,
@@ -224,10 +224,10 @@ function step0($rq){
 	$rq=ss_chek_string($ss_mp);
 	*/
 	
-	#   
+	# Если почта введена
 	if (strlen($email)>4) $rq['c'][] = ['cr'=>0,'ct'=>2,'cname'=>'Email','cval'=>$email]; 
 	
-	//  
+	// Валидация ДР
 	$BirthDate = sprintf("%02d.%02d.%04d", $day, $month, $year);
 	if (empty($BirthDate)) $page['error_msg'] .= "<br>BirthDay not specified!";
 	else {
@@ -237,10 +237,10 @@ function step0($rq){
 		$rq['u']['birthdate'] = $BirthDate;
 	}
 	
-    #  
+    # Пол 
 	if (isset($libs['users.gender'][$Gender])) $rq['u']['gender'] = $Gender;
 	
-    #    ()
+    # Второй телефон  (НЕОБЯЗАТЕЛЕН)
 	$ss_mp=[
 	'n'=>'SecondPhone','v'=>$SecondPhone,
 	'ds'=>0,'nones'=>1,
@@ -250,7 +250,7 @@ function step0($rq){
 	$cv=ss_chek_phone($ss_mp); 
 	if ($cv) $rq['c'][] = ['cr'=>0,'ct'=>1,'cname'=>'Sec phone','cval'=>$cv]; 
 
-    # 
+    # Город
 	$ss_mp=['n'=>'City','v'=>$City,'ee'=>"<br>City not specified!"];
 	$cv=ss_chek_string($ss_mp); if ($cv) $rq['u']['city'] = $cv;
 	
@@ -266,10 +266,10 @@ function addTwoContacts($rq) {
 	$Guarantor4Name = $_POST['Guarantor4Name'];
 
 	$ss_mp=['n'=>'Guarantor3Name','v'=>$Guarantor3Name,'ee'=>"<br>Not Specified name of the person # 1"];
-	$g3n=ss_chek_string($ss_mp); 		#   
+	$g3n=ss_chek_string($ss_mp); 		# Первый поручитель Имя
 	
 	$ss_mp=['n'=>'Guarantor4Name','v'=>$Guarantor4Name,'ee'=>"<br>Not Specified name of the person # 2"];
-	$g4n=ss_chek_string($ss_mp); 		#   
+	$g4n=ss_chek_string($ss_mp); 		# Второй поручитель Имя
 
 	$ss_mp=[
 	'n'=>'Guarantor3Phone','v'=>$Guarantor3Phone,'ds'=>31,
@@ -277,7 +277,7 @@ function addTwoContacts($rq) {
 	'ee'=>"<br>Not Specified phone of the person # 1 Warranty",
 	'er'=>"<br>Error in the phone person # 1! You must enter 7-11 digits without spaces."	
 	];
-	$g3p=ss_chek_phone($ss_mp); 		#   
+	$g3p=ss_chek_phone($ss_mp); 		# Первый поручитель Телефон
 
  	$ss_mp=[
 	'n'=>'Guarantor4Phone','v'=>$Guarantor4Phone,'ds'=>32,	
@@ -285,7 +285,7 @@ function addTwoContacts($rq) {
 	'ee'=>"<br>Not Specified phone of the person # 2 Warranty",
 	'er'=>"<br>Error in the phone person # 2! You must enter 7-11 digits without spaces."	
 	];
-	$g4p=ss_chek_phone($ss_mp); 		#   
+	$g4p=ss_chek_phone($ss_mp); 		# Второй поручитель Телефон
 
 	if ($g3n && $g3p)  $rq['c'][] = ['cr'=>3,'ct'=>1,'cname'=>$g3n,'cval'=>$g3p];
 	if ($g4n && $g4p)  $rq['c'][] = ['cr'=>4,'ct'=>1,'cname'=>$g4n,'cval'=>$g4p];	
@@ -299,13 +299,13 @@ function step4($rq) {
 	
 	if (isset($_FILES) && count($_FILES)>0) {
 
-		// [name] => 0025.jpg [type] => image/jpeg [tmp_name] => /tmp/phpI1VMQz [error] => 0 [size] => 903549
-		// 1
+		// [name] => Фото0025.jpg [type] => image/jpeg [tmp_name] => /tmp/phpI1VMQz [error] => 0 [size] => 903549
+		// Фото1
 		$ah_fn=1; $ah_ff='photo1';
 		$ag_flid=ah_uploadfile(['n'=>$ah_fn,'nf'=>$ah_ff]);	
 		#if ($ag_flid>0) $rq[] = "`f$ah_fn` = $ag_flid";
 
-		// 2
+		// Фото2
 		$ah_fn=2; $ah_ff='photo2';
 		$ag_flid=ah_uploadfile(['n'=>$ah_fn,'nf'=>$ah_ff]);	
 		#if ($ag_flid>0) $rq[] = "`f$ah_fn` = $ag_flid";

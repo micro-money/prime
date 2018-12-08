@@ -2,12 +2,12 @@
 // https://money.com.mm/localrun/un_refdata.php?key=extrun
 
 /* 
-    Lead  CRM  WEB       un_XXXX
+Скрипт проходит по таблице Lead от CRM и WEB и производит пополнение таблиц с перфиксом un_XXXX
 un_tel
 un_nrc
 un_bacc
-:
-1.    
+Алгоритм:
+1. Снимаем данные по статусам
 
 
 UPDATE `zsync_chrome` SET wd='{"ok":1}',dr=now() WHERE id=10;
@@ -17,7 +17,7 @@ delete FROM un_nrc;
 delete FROM un_tel;
 delete FROM un_imei;
 
-#     UsrMMPersonalID
+# Добавление проблемных счетов  UsrMMPersonalID
 drop table if exists temp_userdata;
 CREATE TABLE temp_userdata (
   id int UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -54,20 +54,20 @@ foreach ($tablist as $k=>$tab) {
 	
 	$stat=addNewAnalizData(['tab'=>$tab,'lim'=>$lim,'wd'=>$wjs]);
 	
-	# -  
+	# Кол-во аффектных строк
 	$cron_ar+=$stat['total'];
 	
-	#           >   
+	# Если у нас обработано столько же сколько у нас лимит > Запускаем еще раз
 	if ($stat['total']==$lim) $cron_onemoretime=1;
 	
 	//echo '<br>tab:'.$tab.' ok:'.$stat['ok'].'|err:'.$stat['er'].'|lt:'.$stat['lt'];
 	$wjs=$stat['wd']; unset($stat['wd']);
 	print_r($stat); 
 	
-	#       
+	# ДОбавляем статистику на выход по каждому проходу
 	$cron_wjs[$tab]=$stat;	
 }
-	#     
+	# Передаем рабочие установки для сохранения
 	$cron_sjs=$wjs;
 	
 	
@@ -79,11 +79,11 @@ function addNewAnalizData($mp) {
 	
 	/*
 	$ss = db_array("SELECT id,descr,sw,wd,send,resp,dr FROM `zsync_chrome` WHERE id=10 and act=1"); $ss=$ss[0];
-	$wd=json_decode($ss['wd'], true);			//    json
+	$wd=json_decode($ss['wd'], true);			// рабочие реквизиты в json
 
 	
-	#$tab='zsync_Lead';	#   
-	#     ->      2000  
+	#$tab='zsync_Lead';	# Имя внешней таблицы
+	# Устанавливаем время последней синхронизации -> Если его нет то с 2000 года все
 	$lt='2000.01.01'; 
 	if (isset($wd[$tab]) && isset($wd[$tab]['lt'])) {
 		$lt=$wd[$tab]['lt'];
@@ -96,7 +96,7 @@ function addNewAnalizData($mp) {
 	/*
 	$jid=3; $lt='2000.01.01'; 
 	$ss = db_array("SELECT id,ifnull(jsonset,'{}') wd FROM zsync_async_settings WHERE id=$jid"); $ss=$ss[0];
-	$wd=json_decode($ss['wd'], true);			//    json
+	$wd=json_decode($ss['wd'], true);			// рабочие реквизиты в json
 	if (isset($wd[$tab]) && isset($wd[$tab]['lt'])) {
 		$lt=$wd[$tab]['lt'];
 	} else {
@@ -147,17 +147,17 @@ function addNewAnalizData($mp) {
 	
 	];
 	
-	#     
+	#Снимаем все новые данные для обработки
 	$nlist = db_array($qlist[$tab]);  #  Id='77891e49-0b7b-4cce-8dcc-61e3284a91bb'
 	if ($lim<11) echo $nr.$qlist[$tab];
 	$stat=['tab'=>$tab,'ok'=>0,'err'=>0,'total'=>count($nlist),'wd'=>$wd];
 	
 	if (count($nlist)>0) {
-		#    
+		# Перебираем все новые строчки
 		foreach ($nlist as $key=>$vol) {
 			$eId=$vol['eId']; $t=$vol['t']; 
 
-			#  (  ,  )
+			#Форматируем телефоны (их максимум два, реже три)
 			$phonem=explode(',',$vol['phones']); $phonefm=[];
 			foreach ($phonem as $k=>$v) {
 				
@@ -169,13 +169,13 @@ function addNewAnalizData($mp) {
 			if (!isset($phonefm[0])) {
 				$stat['err']++; 
 				#print_r($vol);print_r($vol);
-				#     ->         
+				# Если нет главного номера -> это критическая ошибка ее надо пофиксить для детального анализа
 				db_request("insert into `un_log` (tab,dt,descr,dv) VALUES ('$tab',$t,'No main phone for Id:$eId',now())");
 			} else {
 				$stat['ok']++;
 				$mphone=$phonefm[0];
 			
-				#          6
+				#Банковский счет под формат только цифры если их не менее 6
 				$ta=''; 
 				if (isset($vol['bacc']) && strlen($vol['bacc'])>5) $ta=onlyInList(array('o'=>$onlyDig,'s'=>strtolower($vol['bacc'])));
 				
@@ -183,44 +183,44 @@ function addNewAnalizData($mp) {
 				.'o'
 				if (strposV2(['s'=>$ta,'i'=>'o'])!=-1) {
 					$ta=str_replace('o', '0',$ta);
-					#       o -   
+					# Если У нас в номере есть o - соседствующая с цифрами
 					db_request("insert into `un_log` (tab,dt,descr,dv) VALUES ('$tab',1,'O in NRC for Id:".$vol['Id']."',now())");
 				}
 				*/
 				
-				#  Nrc         6
+				# Пасспорт Nrc только цифры с права если их не менее 6
 				$tn='';  $fnrc='';
 				if (isset($vol['nrc']) && strlen($vol['nrc'])>5) {
 					
 					$bw=getMmToEngFormatArray();
 
-					#  ID ,    ,     -> 
+					# Форматируем ID , если да то ФОРМАТ, если скрипт сомневается тогда -> Оригинал
 					$fd=FormatMmPersId(['bw'=>$bw,'mmid'=>$vol['nrc']]);
 					$fnrc=$fd['fin'];
 					
-					#          
+					# Тут нам надо найти номер входа первой цифры после нецифры
 					$ms = str_split($fnrc); $mo = str_split($onlyDig); $cs=0;  
-					$msr = array_reverse($ms);	#      
+					$msr = array_reverse($ms);	# Разворачиваем массив и перебираем с конца
 					foreach ($msr as $k=>$v) {
-						if ($cs==0 && !in_array($v,$mo)) $cs=1;	#       ->   
+						if ($cs==0 && !in_array($v,$mo)) $cs=1;	# Мы уперлись в первую не цифру -> все остальное пропускаем
 						if ($cs!=1) $tn=$v.$tn;		
 					}	
 				}
 				
-				#  
+				#Фиксируем Телефоны 
 				foreach ($phonefm as $k=>$v) {
 					db_request('insert ignore into `un_tel` (t,phone,val,eId) VALUES ('.$t.',"'.$mphone.'","'.$v.'","'.$eId.'")');
 				}
 				
-				#  
+				#Фиксируем Счет 
 				if (strlen($ta)>5) db_request('insert ignore into `un_acc` (t,phone,val,eId) VALUES ('.$t.',"'.$mphone.'","'.$ta.'","'.$eId.'")');
 				
-				#  
+				#Фиксируем Паспорт цифры
 				if (strlen($tn)>5) db_request('insert ignore into `un_nrc` (t,phone,val,eId) VALUES ('.$t.',"'.$mphone.'","'.$tn.'","'.$eId.'")');	
-				#  
+				#Фиксируем Паспорт формат
 				if (strlen($fnrc)>5) db_request('insert ignore into `un_nrcf` (t,phone,val,eId) VALUES ('.$t.',"'.$mphone.'","'.$fnrc.'","'.$eId.'")');	
 							
-				# imei 
+				#Фиксируем imei 
 				if (isset($vol['imei'])) db_request('insert ignore into `un_imei` (t,phone,val,eId) VALUES ('.$t.',"'.$mphone.'","'.$vol['imei'].'","'.$eId.'")');	
 			
 				if ($lim<11) {
@@ -234,7 +234,7 @@ function addNewAnalizData($mp) {
 			}	
 		}
 		
-		#            ,       
+		# После того как перебрали фиксим дату на которой закончили в настройках , чтобы в след раз продолжить с нее
 		$lt=$nlist[count($nlist)-1]['ct'];
 		
 		$wd[$tab]['lt']=$lt; $stat['lt']=$lt; $stat['wd']=$wd;

@@ -10,8 +10,8 @@ $page['title'] = 'Locale #'.$id;
 $page['desc'] = 'Edit Locale #'.$id.' translation';	
 
 /*
-      ? 
-  
+Как редактировать запись когда много языков ? 
+Все языки списком
 */
 	
 $tset=['gf'=>'sastabV1',
@@ -23,7 +23,7 @@ $tset=['gf'=>'sastabV1',
 		]
 ];	
 	
-#              
+# Получить все имена столбцов в таблице кроме указанных и перебрать их все сделать редактируемыми
 # $excl=['id','mdkey','enable'];
 #$bfs=['wwen','wwmm','wwbm','wwind','wwsin']; # if (!in_array($k,$excl) && isset($v['p'])) 
 foreach ($app['langn'] as $k=>$v) $fs['ww'.$k]=['e'=>1];
@@ -37,13 +37,13 @@ function ival_sas_sqlm($w) {
 	return $w;
 }
 
-require_once($dr.'/tool/sas/stage1_settings.php');  				#    (        )
-if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				#    
-require_once($dr.'/tool/sas/stage2_build_elements.php');			#        html   
+require_once($dr.'/tool/sas/stage1_settings.php');  				# Создаем динамические элементы (включая необходимые запросы в базу и прочая нагрузочная часть)
+if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');				# Аякс работа если есть
+require_once($dr.'/tool/sas/stage2_build_elements.php');			# Выполняем запросы к базе данных и строим html у динамических элементов
 
-#   
+# Снимаем  
 
-/* --------------------------  ------------ */ ob_start(); ?>
+/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
 	<div class="container">
 		<h2>Translate for: <span class="bg-info"><?= $sas_sqlm['m']['wwen'] ?></span></h2> 
 		<?= $html['en'] ?>

@@ -5,7 +5,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/app_func.php');
 # Here new adds
 # One more adds
 
-/* -----------------------   ----------------------- */
+/* ----------------------- ПАРАМЕТРЫ СТРАНИЦЫ ----------------------- */
 $page['title'] = '';
 # ticks:[25000, 50000, 75000, 100000, 125000, 150000, 175000, 200000],
 
@@ -56,12 +56,12 @@ function getdp(){
 # 20$, 35$, 60$, 75$, 100$, 115$,  145$ ,  220$
 # 1$ 50,5 	PHP  1000, 1750,      3000, 3750, 5000, 5750,  7750 ,  10000$
 # 1$ 1357 	MMK  20$, 35$, 60$,   75$, 100$, 115$,  145$ ,  220$ 
-# ( )
+# (Индонезийская рупия)
 # 1$ 13388  IDR  120000  200000, 400000, 800000,   1000000, 1350000, 1500000,  2000000 ,  3000000 
 # 1$ 34 	THB
 # 1$ 153 	LKR  3000, 5000, 8000,   10000, 13000, 15000,  20000 ,  30000 
 # 1$ 35 	LKR  800, 1500, 2100,   2700, 3500, 4000,  6000 ,  8000 
-/* ----------------------   ----------------------- */
+/* ---------------------- КОНТРОЛЛЕР СТРАНИЦЫ ----------------------- */
 
 function getnewdate($format, $day_offset) { 
      return date($format, time() + $day_offset * 24 * 60 * 60); 
@@ -70,14 +70,14 @@ function getnewdate($format, $day_offset) {
 $ah_headout='';
 
 /*
- :
-           
-   ,    ?
-      ?               
-                 bad gay.
-:      .
-         
-   .
+АЛГОРИТМ РАБОТЫ:
+Что будет если пользователь сначала зашел по своему телефону на одном браузере
+потом на другом , а потом на третем?
+Он добавиться во все три ячейки ? Или мы объединим все три браузреа в одну ячейку и все пользователи этих браухеров 
+объединяться в общую кредитную ячейку на которую может лечь общий бан если кто то из нее станет bad gay.
+ОТВЕТ: объединяем все три ячейки в одну.
+Каждый пользователь при переходе из ячейки в ячейку объединяет 
+эти ячейки между собой.
 */
 
 if (!empty($_POST['SignupForm'])) {
@@ -87,102 +87,102 @@ if (!empty($_POST['SignupForm'])) {
     $RequestAmount 	= intval($_POST['application']['amount']);
     $LoanDays 		= intval($_POST['application']['term']);
     
-	// 1: 	   
+	// Шаг1: 	Валидация номера и имени
     if (!preg_match("|^[0-9]{7,11}$|i", $phone)) aPgE("<br>An error in the phone number! You must enter 7-11 digits without spaces.");
 	if (empty($Name)) aPgE("<br>Full Name not specified!");
 	
-	// 2: 	
+	// Шаг2: 	Авторизация
     if (empty($page['error_msg'])) {
 		
 		$ah_auth=0; $ouid=0; $ah_ur=[];
-		//   
+		// Заводим сессию авторизации
 		$auth_hash = sprintf('%04x', rand(0, 65536)) . sprintf('%04x', rand(0, 65536)) . sprintf('%04x', rand(0, 65536)) . sprintf('%04x', rand(0, 65536));
 		setcookie('auth_hash', $auth_hash, time() + $cooktime, '/', false);		
 		
-		$ah_ur[]="`auth_hash` = '$auth_hash'";				#   
+		$ah_ur[]="`auth_hash` = '$auth_hash'";				# Добавляем обновление хэша
 		
-		if (isset($user['id'])) {	#  
+		if (isset($user['id'])) {	# Браузер авторизован
 			$ah_auth=1;								
-			if ($user['login'] != $phone) $ouid=$user['id'];#  ,      				
+			if ($user['login'] != $phone) $ouid=$user['id'];# Браузер авторизован, но введен номер отличный от авторизованного				
 		} 
 		
 		if ($ah_auth==0 || $ouid>0) {
 			
-			#  :           
-			#  :    
-			#  :   ,      
+			# МИМО :  Браузер авторизован и пользователь верно ввел авторизованный телефон  
+			# ТУТ А:  Браузер не авторизован
+			# ТУТ Б:  Браузер авторизован, но введен номер отличный от авторизованного
 			
-			# 1)         
+			# 1) Ищем в базе клиента с указанным номером телефона 
 			#$sr="SELECT * FROM `users` as u WHERE `login` = '$sql_phone'"; 
 			
-			#       
+			# Ищем поданный телефон среди основных телефонов клиента
 			$sr="SELECT uid FROM `users_contacts` as u WHERE cr=0 and ct=1 and `cval` = '$sql_phone'"; 
 			$sUser = db_array($sr);
 			
 			if (count($sUser)==0) {  
-				#    ->   
-				//   
+				# Номер указан впервые -> Регистриуем нового пользователя
+				// Генерация случайного пароля
 				$user_pass = sprintf('%04x', rand(0, 65536)) . sprintf('%04x', rand(0, 65536));  $user_pass_hash = sha1($user_pass);
 		
 				$rq = "INSERT INTO `users` SET `fil`=$fil,`login` = '$sql_phone',`pass` =  '$user_pass_hash',`auth_hash` = '$auth_hash',`name` = '$sql_name'";			
 				$nuid = db_insert($rq);
-				#     
+				# Вносим основной телефон в контакты
 				db_request("insert ignore into users_contacts (uid,cr,cname,cval,ct,cp) values ($nuid,0,'Primary phone','$sql_phone',1,1)");
 				
-				#        
+				# Проверяем клиента по старым долгам если они есть
 				db_request("update users U,calc_od T SET U.a_od=1 WHERE U.id=$nuid and T.Title like '%$sql_phone%';");
-				db_request("update users U,calc_d T SET U.a_cd=1 WHERE U.id=$nuid and T.Title like '%$sql_phone%';");				
+				db_request("update users U,calc_сd T SET U.a_cd=1 WHERE U.id=$nuid and T.Title like '%$sql_phone%';");				
 				
-				//           
+				// Пробуем валидно поднять данные пользователя по номеру телефона если юзер новый
 				$userm = db_array("SELECT * FROM `users` WHERE `id` = $nuid"); $user = $userm[0];
 								
-			} else {	#     ->     
+			} else {	# Номер есть в базе -> Берем его массив как рабочий
 				$srm=db_array("SELECT * FROM `users` WHERE id = ".$sUser[0]['uid']);   $user = $srm[0];
-				if (in_array($user['role'],$rolem)) {header("Location: /"); exit;}	//      ..       
+				if (in_array($user['role'],$rolem)) {header("Location: /"); exit;}	// Админа выкидываем на главную страницу т.к. нельзя указав админа логи без парольно заходить
 			}
 			
-			#               
+			# Фиксируем с какого именно телефона клиент авторизовался если была смена телефона или авторизация с нуля
 			db_request("INSERT INTO `users_uphone` (uid,lphone,lname,dv) VALUES ({$user['id']},'$sql_phone','$sql_name',now())");
 			
 		}
 		
-		#    Ip   
+		# Фиксируем на клике Ip и браузер клиента
 		db_request("INSERT INTO `users_whist` (uid,ip,br,dv) VALUES ({$user['id']},'$ip_sql','$br_sql',now())");
 
-		#             
+		# Фиксируем связь если пользователь авторизовался под новым аккаунтом когда был ранее под другим
 		if ($ouid>0) db_request("INSERT INTO `users_lck` (k1,k2,dr) VALUES ($ouid,{$user['id']},now())");
 						
 		/*
-		#          
-		# 1)       ->  +   
-		# 2)    ->   +  
+		# Производим проверку пользователя на наличие в базе уже бравших клиентов
+		# 1) на долг и если он есть -> Аллерт + Сканы об оплате
+		# 2) наличие погашенного займа -> Новый займ + Вторичная анкета
 		os
-		:   :   / ,    /  
+		Алгоритм: Нам нужены факты: брал ранее да/нет ,  долг  да/нет  
 		
-		:      . 
-		    :
-			0 -       .
-			1 -        .
-			2 -   ,     ,    
-			3 -   (      )
-			4 -   (  )
+		Новый: У нас пользователь кликнул взять кредит. 
+		Надо знать что за клиент:
+			0 - Без истории и без анкет на разборе.
+			1 - Без истории но есть открытая анкета на разборе.
+			2 - Хороший повторник , уже брал кредиты и вернул, без анкет на разборе
+			3 - В кредите (имеется один не погашенный кредит без проспрочки)
+			4 - В просрочке (клиент в просрочке)
 	
-			          (     )
+			Надо знать есть ли у клиента лиды в стадии разбора (это может быть только одна единственная)
 				aleads=(select id,st from leads where uid=user_id and st<6;
-			        (   )
+			Надо знать есть ли у клиента активные сделки (и если они есть)
 				aloans=(select id,st from loans where uid=user_id and st<6;
 			
 		*/
 
 		$o=checkUser(); 	$ah_headout="Location: /".$o['h']; 	 $new_app=$o['a'];			
 		#print_r($o); die();			
-		if ($new_app==1) {	#        
+		if ($new_app==1) {	# ЗАВОДИМ НОВУЮ АНКЕТУ Если мы готовим новую заявку
 			$application_id = db_insert("INSERT INTO `leads` SET `uid` = {$user['id']},`fil`=$fil,`ramount` = $RequestAmount,`rdays` = $LoanDays,`a_cd` = {$user['a_cd']}");
 			$qw="update users set a_lid=$application_id where id={$user['id']}";
 			db_request($qw);
 		}
 			
-		#            CRM >      CRM    
+		# Если мы создали нового клиента у которого есть старые сделки в CRM > надо взять его информацию из CRM данных и прикрепить себе
 		if (isset($nuid) && $user['a_od']>0 || $user['a_cd']>0) {
 			$ppost=[]; $rq=['l'=>[],'u'=>[],'c'=>[],'a'=>[]];
 			require_once($dr.'/tool/sas/constants.php');	
@@ -204,7 +204,7 @@ if (!empty($_POST['SignupForm'])) {
 				}
 			}
 			
-			#      09775217760 
+			# Загоняем данные по клиенту  09775217760 
 			if (isset($page['error_msg'])) $ope=$page['error_msg']; 
 			$o=acceptPost(['user'=>$user,'rq'=>$rq,'pd'=>$ppost]); 
 			if (isset($ope)) $page['error_msg']=$ope;
@@ -212,20 +212,20 @@ if (!empty($_POST['SignupForm'])) {
 		}
 			
 		/*
-		        ?
-			       .  ?
-			      .
-			     
+		Что если клиент ввел отличное имя от ранее введенного?
+			Надо запоминать все что клиент когда либо вводил. Как сделать?
+			Рассмотрим этот случай после отдельно не сейчас.
+			Сейчас мы используем старое имя клиента
 		
 		
-		#      ->      
+		# Если клиентос был в базе -> Обновляем имя если клиент ввел другое
 		if (!empty($sUser['id']) && $new_app==1) {  
 			require_once($dr.'/tool/app_ah_ins.php');
 			if (ah_ins(['ah_fn'=>'Name','ah_val'=>$Name])) $ah_ur[]= "`Name` = '".mysql_real_escape_string($Name)."'";
 		}
 		*/
 		
-		#    +
+		# Обновляем реквизиты юзера Хэш+Имя
 		db_request("UPDATE `users` SET ".implode(',',$ah_ur)." WHERE `id` = {$user['id']}");	
 		$_SESSION['user_id'] = $user['id'];
     }
@@ -236,15 +236,15 @@ if (!empty($_POST['SignupForm'])) {
 
 header(getMadheader());
 
-if ($ah_headout!='') header($ah_headout);  //    
+if ($ah_headout!='') header($ah_headout);  // Перекидываем если есть куда
 
-/* --------------------------  ------------ */ ob_start(); ?>
+/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
 
     <h1 class="main__title text-center"><?= l('Cash Advance For Your Personal Needs') ?></h1>
 <div class="wrapper">
 	
 	<form class="simple_form form_hero" role="form" autocomplete="off" novalidate="novalidate" id="new_application" action="/" accept-charset="UTF-8" method="post">
-        <input name="utf8" type="hidden" value="�">
+        <input name="utf8" type="hidden" value="✓">
         <input type="hidden" name="authenticity_token" value="jI+FEddtlzMWl7oK2p4ARcrF/sQqt9/xmLeXvtoxKfX0pcyoj3uyX47QLR4on4m+YZqo08nPQtzlRobcK8SgPA==">
         <div class="hero" id="hero" role="scrollTo">
             <div class="hero__left">
@@ -382,8 +382,8 @@ if ($ah_headout!='') header($ah_headout);  //
                 <span class="main__icons__title"><?= l('Money will be sent immediately after approval') ?></span>
             </li>
             <li class="col-md-2 main__icons__item">
-                <img height="70" alt="<?= l('Always there for you � any time, any place') ?>" src="images/clock.png">
-                <span class="main__icons__title"><?= l('Always there for you � any time, any place') ?></span>
+                <img height="70" alt="<?= l('Always there for you – any time, any place') ?>" src="images/clock.png">
+                <span class="main__icons__title"><?= l('Always there for you – any time, any place') ?></span>
             </li>
             <li class="col-md-2 main__icons__item">
                 <img height="70" alt="<?= l('Flexible disbursement and repayment term') ?>" src="images/calendar.png">

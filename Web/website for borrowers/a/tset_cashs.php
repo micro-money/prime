@@ -1,6 +1,6 @@
 <?php 
 
-$tset_cashs=['gf'=>'sastabV1',				# :    
+$tset_cashs=['gf'=>'sastabV1',				# ОБЯЗ: Имя функции конструктора элемента
 		'tl'=>	['money'=>[
 				'c'=>['act'=>['fn'=>'Actions','p'=>'action','q'=>'(select 1)'],],
 				],],
@@ -9,7 +9,7 @@ $tset_cashs=['gf'=>'sastabV1',				# :
 			'For user'=>'SELECT {(select)} FROM money m WHERE m.uid={(user_id)} {(where)} {(group)} {(having)} order by m.operday {(limit)}',
 			'For loan'=>'SELECT {(select)} FROM money m WHERE m.loan={(loan)} {(where)} {(group)} {(having)} order by m.operday {(limit)}',
 		],
-		#   (select fields)
+		# Поля выбора (select fields)
 		'dl'=>10,
 		'filter'=>[
 				'fw'=>['mid','mloan','moperday','mdv'], 

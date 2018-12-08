@@ -6,14 +6,14 @@ require_once($dr.'/a/access.php');
 $page['title'] = 'Scan check';
 $page['desc'] = 'Check customers scans';
 
-#$vlim=['etd'=>' if (strlen($tdv)>60) $tdf=substr($tdv, 0, 60)." ...";'];	#    10 
+#$vlim=['etd'=>' if (strlen($tdv)>60) $tdf=substr($tdv, 0, 60)." ...";'];	# Обрезка значения до 10 символов
 /*
-:        ft(1,2)   .
-1)      (   ).      
-2)     NRC  (          )
+Алгоритм: Задача проверить все сканы документов с типом ft(1,2) в два захода.
+1) В тему ли этот скан (нужный документ или нет). Если не в тему то 
+2) Является ли этот скан NRC документом (он у всех одинаковый и искать его предпочтительнее чем банковские сканы)
 
-     .     .
-     .
+Для реализации функционала используем кастомный файл. В котором будет кастомный запрос.
+Для реализации функционала используем очередь захвата.
 */
 
 $mel='mt';
@@ -30,13 +30,13 @@ $dpel=[
 			'Document check'=>['(w|n)'=>'empty|wt1|e'],
 			'NRC check'=>['(w|n)'=>'empty|wt2|e'],
 			],
-		'wtmpl'=>[	#    
-				'wt1'=>['t'=>'uf.ac=0 and uf.ft in (1,2) order by uf.dv DESC '],	#  nrc +       
-				'wt2'=>['t'=>'uf.ac=1 and uf.ft=2 order by uf.dv DESC '],			#  nrc    
+		'wtmpl'=>[	# Группировка всегда сначала новые
+				'wt1'=>['t'=>'uf.ac=0 and uf.ft in (1,2) order by uf.dv DESC '],	# Только nrc + банк которые еще не проверялись на документ
+				'wt2'=>['t'=>'uf.ac=1 and uf.ft=2 order by uf.dv DESC '],			# Только nrc которые после проверки документа
 				],
 		'setd'=>'Document check',
-		'not show all'=>1,	#    -  .    
-		'filter'=>[	# 
+		'not show all'=>1,	# Не показывать фильтр - все . Он тут не уместен
+		'filter'=>[	# Фильтр
 			'addhtml'=>'',  
 			],		
 		'mf'=>['efunc'=>'CheckScansGallery'],
@@ -46,53 +46,53 @@ $dpel=[
 		
 
 /*
-    1   +       3      
+ОБЯЗАТЕЛЬНО НАДО СДЕЛАТЬ КНОПКУ 1 РАЗ НАЗАД + НАДО СДЕЛАТЬ ЗАВИСАНИЕ ПОСЛЕ ОБНОВЛЕНИЯ на 3 секунды чтобы чел не кликал быстро
 */
-$page['js'][] = $hn.$selfp.'/m.js?ver='.$jsver;						#   js
+$page['js'][] = $hn.$selfp.'/m.js?ver='.$jsver;						# Подключаем персональный js
 
-#      -        
+# Для норм работы селектора работы - без этого не переключается расчет строк которые остались
 $pset=['only'=>'w','el'=>$mel]; if (isset($_POST[$mel.'(setd)'])) $pset['setd']=$_POST[$mel.'(setd)'];
 	
-if (isset($_POST['wtype']) && isset($dpel[$mel]['setl'][$_POST['wtype']])) {	#   1.          
+if (isset($_POST['wtype']) && isset($dpel[$mel]['setl'][$_POST['wtype']])) {	# Кастомная работа 1. Пришел тип работы и он совпадает с режимами на странице
 	
-	if ($_POST['wtype']=='Document check') {	#     ac3 ->       (/) -> ac3=>[ID1,ID2](   ac3)  ac3=[] (   ac3)
+	if ($_POST['wtype']=='Document check') {	# Если пришел пост с ac3 -> значит у нас режим проверки на документ(да/нет) -> ac3=>[ID1,ID2](Есть строки на ac3) или ac3=[] (нет строк на ac3)
 		$ac1=4; $ac2=1; $ac3=0;
 	}
-	if ($_POST['wtype']=='NRC check') {	#     ac2 ->         -> ac2=>[ID1,ID2](    )  ac2=[] (    )
+	if ($_POST['wtype']=='NRC check') {	# Если пришел пост с ac2 -> значит у нас режим проверки совпадения типа паспорта -> ac2=>[ID1,ID2](Есть строки с несовпадающим типом) или ac2=[] (все строки совпадают по типу)
 		$ac1=3; $ac2=2; $ac3=1;
 	}
 	$idm=[]; if (isset($_POST['idl'])) foreach ($_POST['idl'] as $rid) if (is_numeric($rid)) $idm[]=intval($rid); 
 	#print_r($idm); die('$ac1='.$ac1.'; $ac2='.$ac2.'; $ac3='.$ac3.';');
 	if (count($idm)>0) db_request('update users_files set ac='.$ac1.' where id in ('.implode(',',$idm).')');
 	
-	db_request('update users_files set ac='.$ac2.' where iw='.$user['id'].' and ac='.$ac3.' ');	#       c ac=1 -> ac=2 -> ..    
+	db_request('update users_files set ac='.$ac2.' where iw='.$user['id'].' and ac='.$ac3.' ');	# Помечаем все оставшие что в работе c ac=1 -> ac=2 -> т.к. они соответвуют паспортам 
 }
 
-require_once($dr.'/tool/sas/stage1_settings.php');  					#    (        )
+require_once($dr.'/tool/sas/stage1_settings.php');  					# Создаем динамические элементы (включая необходимые запросы в базу и прочая нагрузочная часть)
 
-#     mt
-$func = $dpel[$mel]['gf']; 												#    
-$w=$func(array_merge($dpel[$mel],$pset));								#     
+# Очередь для текущего оператора mt
+$func = $dpel[$mel]['gf']; 												# Имя функции построения элемента
+$w=$func(array_merge($dpel[$mel],$pset));								# Запускаем функцию с именем элемента
 				
-db_request('update users_files uf set iw=0 where iw='.$user['id']);	#   
-db_request('update users_files uf set iw='.$user['id'].' where 1=1 '.$w['where'].' '.$w['limit']);	#       
+db_request('update users_files uf set iw=0 where iw='.$user['id']);	# Сброс старой работы
+db_request('update users_files uf set iw='.$user['id'].' where 1=1 '.$w['where'].' '.$w['limit']);	# Добавляем в очередь новые согласно входящему условию
 
-$dpel[$mel]['wtmpl']['wt1']['t']='iw='.$user['id'];						#    .          
+$dpel[$mel]['wtmpl']['wt1']['t']='iw='.$user['id'];						# Корректируем шаблон условия . Меням выборку работы на все что есть на текущего оператора
 $kolm=db_array($w['sql_kol']);	$kol=$kolm[0]['kol']; 
-$dpel[$mel]['tkol']=$kol;												#   -   	
+$dpel[$mel]['tkol']=$kol;												# Отдаем все кол-во по текущей работе	
 
 #$page['js_raw'].='sas_setl_'.$mel.'='.json_encode(array_keys($dpel[$mel]['setl'])).';';
 
 $nextbut='<div class="form-group" style="padding: 5px;margin-bottom: 5px;margin-right: 7px;"><button type="button" class="btn btn-warning" onclick="nextch({el:\''.$mel.'\',wtype:\''.$w['setd'].'\'});">These are checked > Open next scans</button></div>';
 $dpel[$mel]['mf']['inputsetd']=$w['setd'];
 
-if ($kol>0) $dpel[$mel]['filter']['addhtml']=$nextbut;					#     -   >  
+if ($kol>0) $dpel[$mel]['filter']['addhtml']=$nextbut;					# Если у нас есть кол-во в работу > Добавляем кнопку
 
-if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');					#    
+if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');					# Аякс работа если есть
 
-require_once($dr.'/tool/sas/stage2_build_elements.php');				#        html   
+require_once($dr.'/tool/sas/stage2_build_elements.php');				# Выполняем запросы к базе данных и строим html у динамических элементов
 
-function CheckScansGallery($mp){	#    	
+function CheckScansGallery($mp){	# Пример построения галлереи иконок	
 	$tabf=$mp['tabf']; $tdms=$mp['tdms']; $tre=$mp['tre']; $bb=[]; 
 	foreach ($tabf as $tr=>$kr) if (is_string($kr['timg']['v'])) $bb[]='
 	<div '.$tre[$tr].' style="border-top: 1px double black;float:left;min-width:230px;min-height:255px;" '.$kr['timg']['e'].'>
@@ -106,7 +106,7 @@ function CheckScansGallery($mp){	#
 	return ['h'=>$html,'a'=>'']; # ,'a'=>$bl
 }
 
-/* --------------------------  ------------ */ ob_start(); ?>
+/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
 	<div class="container">
 		<?= $html[$mel] ?>
 	</div>

@@ -6,7 +6,7 @@ $this_wizard_name='scan_wizard';
 require_once 'app_init.php';
 
 //	print_r($user);
-/* -----------------------   ----------------------- */
+/* ----------------------- ПАРАМЕТРЫ СТРАНИЦЫ ----------------------- */
 $page['title'] = 'Scan Form';
 $page['js_raw'] = <<<JS
     window.gon={};
@@ -27,9 +27,9 @@ $sql_kldata="SELECT
 FROM calc_od where Title like '%".$user['login']."%'"; 
 # ,sync_id as id and StageId in ('".implode("','",array_keys($bad2))."')  09767195322
 
-$user_edata = db_row($sql_kldata);	//  
+$user_edata = db_row($sql_kldata);	// Открытые сделки
 
-$step=0;  // 0 -   10 -    
+$step=0;  // 0 - Обычная анкета 10 - в один шаг 
 
 if (isset($_GET['step'])) $step = intval($_GET['step']);
 $rq=['`updated_at` = now()'];
@@ -41,7 +41,7 @@ if (!empty($_POST['data'])) {
 				$ah_fn=3; $ah_ff='photo1';
 				$ag_flid=ah_uploadfile(['n'=>$ah_fn,'nf'=>$ah_ff]);	
 				if ($ag_flid>0) {
-					#      
+					# Дублируем  строчку на выгрузку 
 					#db_request("INSERT INTO `crm_out_scans` (login,stype,scan,dv) select u.login,f.ft,concat('http://money.com.mm',f.fp),f.dv from application_files as f,users as u where f.id=$ag_flid and u.id=f.uid");
 				} else {
 					aPgE("<br>Photo not uploaded. Please try again.");
@@ -67,8 +67,8 @@ $ss_payday=''; if (isset($user_edata['fpayday'])) $ss_payday=$user_edata['fpayda
 
 $ss_hakey=$step+1;		
 $ss_fhref='/scan_wizard'; if ($step>0) $ss_fhref.='?step='.$step;
-$tmpl='sections/frontend/payment/step' . $step;					#     
-/* --------------------------  ------------ */ 
+$tmpl='sections/frontend/payment/step' . $step;					# Шаблон страницы след шага анкеты
+/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ 
 ob_start(); 	require_once($dr.'/templates/'.$tmpl.'.php');
 ?>
 <? #e($tmpl) ?>

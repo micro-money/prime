@@ -1,13 +1,13 @@
 <?php
 
-$tset_appdata=['gf'=>'sastabV1',				#      
+$tset_appdata=['gf'=>'sastabV1',				# Базовые настройки для списка контактов 
 		'tl'=>	['users_mapdata'=>[],],		
-		#   (qwery template)  as mdv
+		# Шаблон запроса (qwery template)  as mdv
 		'qt'=>"SELECT {(select)} FROM users_mapdata md WHERE 1=1 {(where)} {(group)} {(having)} {(order)} {(limit)}",
 		'qtl'=>[
 			'For user'=>'SELECT {(select)} FROM users_mapdata md WHERE md.user_id={(user_id)} {(where)} {(group)} {(having)} {(order)} {(limit)}',
 		],
-		#   (select fields)
+		# Поля выбора (select fields)
 		'dl'=>100,
 		'filter'=>[
 				'fw'=>['mduid','mddt','mdvol','mddv'], # ,'ulogin','uname','unrc','uemail'

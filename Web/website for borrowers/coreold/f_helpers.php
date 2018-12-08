@@ -1,6 +1,6 @@
 <?php
 
-/*  +   CRM*/
+/* ХЕЛПЕРЫ + ОБЯЗАТЕЛЬНЫЕ ДЛЯ CRM*/
 
 function redirect($url) {
     if ($url == 404) $url = $app['404'];
@@ -21,14 +21,14 @@ function fixLoans($mp) {	// fixLoans(['lup'=>$lup,'id'=>$id]);
 */
 
 function fixLoans($mp,$ei=false) {	// fixLoans(['lup'=>$lup,'id'=>$id]);
-	#   fixLoans     mp   ($u,$i)
+	# Хочу использовать fixLoans в двух вариантах с mp или с ($u,$i)
 	if (!empty($ei)) {
 		$u=$mp; $i=$ei;
 	} else {
 		$u=$mp['lup']; $i=$mp['id'];
 	}
 	
-	#              
+	# Тут могут быть тригеры на те или иные апдайты по сделкам с разных мест
 	
 	arrToUpdate(['t'=>'loans','u'=>$u,'i'=>$i]);
 }

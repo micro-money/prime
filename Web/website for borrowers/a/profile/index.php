@@ -11,7 +11,7 @@ $sas_sqlm=['user_id'=>$user_id];
 $page['title'] = 'Profile #'.$user_id;
 $page['desc'] = 'Edit admin profile';
 
-include($dr.'/a/tset_userinfo.php');	#     +    
+include($dr.'/a/tset_userinfo.php');	# Данные клиента по типам + шаблон для карточки клиента
 $dpel=['pi'=>$tset_userinfo]; $v=['e'=>1];
 
 $dpel['pi']['fs']=['ulogin'=>$v,'uname'=>$v,'ugender'=>$v,'upass'=>$v,'urole'=>[]];
@@ -19,7 +19,7 @@ $dpel['pi']['fs']=['ulogin'=>$v,'uname'=>$v,'ugender'=>$v,'upass'=>$v,'urole'=>[
 if ($user['role']=='super') $dpel['pi']['fs']['urole']= $v;
 
 if (!empty($sas_eupd)) $sas_eupd=[];
-$sas_eupd[]='ival_chpass';		#         'e'=>1        
+$sas_eupd[]='ival_chpass';		#   Доп Блокировка обновления хотя она избыточная 'e'=>1 и так и так не будет у безправного
 
 function ival_chpass($w){
 	if ($w['tfn']=="upass") {
@@ -31,13 +31,13 @@ function ival_chpass($w){
 	return $w;
 }
 
-require_once($dr.'/tool/sas/stage1_settings.php');  				#    (        )
-if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');		#    
-require_once($dr.'/tool/sas/stage2_build_elements.php');			#        html   
+require_once($dr.'/tool/sas/stage1_settings.php');  				# Создаем динамические элементы (включая необходимые запросы в базу и прочая нагрузочная часть)
+if (isset($sas)) require_once($dr.'/tool/sas/sas_init.php');		# Аякс работа если есть
+require_once($dr.'/tool/sas/stage2_build_elements.php');			# Выполняем запросы к базе данных и строим html у динамических элементов
 
 $cuname=$sas_sqlm['m']['uname'].' ['.$sas_sqlm['m']['ulogin'].']';
 #print_r($sas_eupd); die();
-/* --------------------------  ------------ */ ob_start(); ?>
+/* -------------------------- ОТОБРАЖЕНИЕ ------------ */ ob_start(); ?>
 	<div class="container-fluid" style="margin-top: -20px;">
 		<h2>Profile for customer # <?= $user_id.' '.$cuname ?></h2>
 <div class="row">
